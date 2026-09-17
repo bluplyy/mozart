@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MOZART — Haute Couture & Architecture of Silhouette
 
-## Getting Started
+A minimalist luxury e-commerce web platform inspired by iconic European fashion houses (*Louis Vuitton, Chanel, Gucci, Prada, and The Row*), engineered with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and connected to **Supabase**.
 
-First, run the development server:
+---
 
+## 🏛️ Key Features & Architecture
+
+### 1. Customer Storefront
+- **Haute Couture Aesthetic**: Monochromatic palette (deep obsidian `#09090b`, warm alabaster `#fafaf8`, hairline borders), wide-tracked serif typography (*Italiana* & *Cormorant Garamond*), and generous editorial whitespace.
+- **Editorial Campaign Homepage**: Full-viewport cinematic hero banner, interactive **Two Universes Split Gateway** (*L'Homme & La Femme*), curated seasonal highlights, and brand manifesto.
+- **Dedicated Men's & Women's Collections**: Strictly segregated 2-category structure with 3:4 portrait aspect ratio cards, 700ms dual-photo hover cross-fade, and price sorting.
+- **Asymmetrical Product Detail Page (PDP)**: High-resolution editorial gallery on the left, sticky purchasing drawer on the right with French sizing (36–44 / 46–54) and artisan care accordions.
+- **Slide-out Shopping Bag**: Real-time quantity management, complimentary courier notice, subtotal calculation, and atelier order placement.
+- **Two-Step Client Registration & Email OTP**: Secure registration with 6-digit confirmation code retrieved via real Gmail or the in-app Webmail simulator (`/gmail`).
+- **Private Salon Patron Dossier (`/account`)**: VIP membership tier status and acquisition order history.
+
+### 2. Admin Studio Portal (`/admin`)
+- **Route Guard Protection**: Automatic barrier redirecting unauthenticated users to `/admin/login`.
+- **Curator Control Room**: Real-time KPI metrics cards (Active Archive, Men's count, Women's count, Total Catalog Value in USD).
+- **Product Catalog Management**: Instant keyword search, category tabs (`All`, `Men`, `Women`), live pricing, and stock status.
+- **Product Creation & Modification Modal**: Full CRUD with live thumbnail preview and 1-click curated luxury lookbook presets.
+- **Supabase Cloud Synchronization**: In-browser API key configuration modal with 1-click database seeding.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/bluplyy/mozart.git
+cd mozart
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Running Locally
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open in your desktop browser:
+- **Customer Storefront**: [http://localhost:3000](http://localhost:3000)
+- **Admin Studio**: [http://localhost:3000/admin](http://localhost:3000/admin)
+- **Gmail Webmail Simulator**: [http://localhost:3000/gmail](http://localhost:3000/gmail)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔑 Pre-Configured Demo Accounts
 
-To learn more about Next.js, take a look at the following resources:
+| Portal | Role | Email | Password |
+|---|---|---|---|
+| **Customer Storefront** | Client Patron | `client@mozart.com` | `password123` |
+| **Admin Studio** | Maison Curator | `admin@mozart.com` | `atelier2026` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗄️ Supabase Setup (Optional)
 
-## Deploy on Vercel
+The application features an **Offline-First Resilience Fallback**, operating seamlessly even without cloud credentials. To connect your live Supabase project:
+1. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Enter your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+3. In your Supabase SQL Editor, run the schema defined in `design.md` or click **"Seed Mozart Catalog to Supabase"** from the Admin panel!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 Documentation
+
+- [design.md](design.md): Comprehensive UI/UX Design System, Design Tokens & Layout Specs.
+- [skill.md](skill.md): Developer Operations Playbook, DDL SQL, and Runbook.
+- [decisions.md](decisions.md): Architecture Decision Records (ADRs).
+- [learnings.md](learnings.md): Technical Insights, Gotchas, and Solutions.
+
+---
+
+© MOZART HAUTE COUTURE • PARIS • ALL RIGHTS RESERVED.
