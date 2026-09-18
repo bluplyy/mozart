@@ -83,11 +83,11 @@ export default function Navbar() {
       {/*
         ─────────────────────────────────────────────────────────────
         PERMANENT, STATIC NAVBAR HEADER
-        z-index: 50 — sits above the sidebar drawer layer (z-45).
+        z-index: 40 — sits below the sidebar drawer layer (z-60).
         Dimensions, layout, font sizes, and positions NEVER move or resize.
         ─────────────────────────────────────────────────────────────
       */}
-      <header className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
+      <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
         <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium select-none">
           Complimentary Worldwide Courier & Signature Studio Wrapping
@@ -214,6 +214,7 @@ export default function Navbar() {
         onClose={() => setSidebarOpen(false)}
         onMouseEnter={handleSidebarMouseEnter}
         onMouseLeave={handleSidebarMouseLeave}
+        onSwitchCategory={(cat) => setSidebarCategory(cat)}
       />
     </>
   );
