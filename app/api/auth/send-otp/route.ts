@@ -23,51 +23,144 @@ export async function POST(req: Request) {
     const confirmToken = token || code || "verify";
     const confirmLink = customConfirmationUrl || `${baseUrl}/confirm?token=${encodeURIComponent(confirmToken)}&email=${encodeURIComponent(email)}`;
 
-    // Luxury HTML template for email confirmation
+    // Luxury Haute Couture HTML template for email clients (Gmail, Apple Mail, Outlook)
     const htmlTemplate = `
-      <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #fafaf8; padding: 40px 20px; color: #09090b;">
-        <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e5e5; padding: 44px 36px;">
-          <div style="text-align: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 24px; margin-bottom: 32px;">
-            <span style="font-size: 24px; font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase; color: #09090b; display: block;">
-              M O Z A R T
-            </span>
-            <span style="font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #71717a; margin-top: 4px; display: block;">
-              Haute Couture • Paris
-            </span>
-          </div>
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+      <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Confirm Your Mozart Membership</title>
+        <style type="text/css">
+          body { margin: 0 !important; padding: 0 !important; background-color: #f7f7f5 !important; }
+          table { border-collapse: collapse !important; mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
+          a { text-decoration: none !important; color: inherit !important; }
+          @media only screen and (max-width: 620px) {
+            .email-container { width: 100% !important; max-width: 100% !important; }
+            .card-content { padding: 32px 20px !important; }
+            .cta-button { display: block !important; width: 100% !important; padding: 18px 20px !important; }
+          }
+        </style>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #f7f7f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f7f7f5" style="background-color: #f7f7f5; padding: 48px 0 64px 0;">
+          <tr>
+            <td align="center" valign="top">
+              <div style="display: none; font-size: 1px; color: #f7f7f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+                Confirm your email address to activate your private membership privilege at MOZART Haute Couture Paris.
+              </div>
 
-          <h2 style="font-size: 16px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #09090b; margin-bottom: 18px; text-align: center;">
-            Confirm Your Client Profile
-          </h2>
+              <table class="email-container" width="600" border="0" cellpadding="0" cellspacing="0" style="width: 600px; max-width: 600px; margin: 0 auto;">
+                <!-- Brand Header -->
+                <tr>
+                  <td align="center" style="padding-bottom: 28px;">
+                    <span style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase; color: #09090b; display: block;">
+                      M O Z A R T
+                    </span>
+                    <span style="font-size: 9px; font-weight: 500; letter-spacing: 0.35em; text-transform: uppercase; color: #71717a; display: block; margin-top: 6px;">
+                      Haute Couture • Place Vendôme • Paris
+                    </span>
+                  </td>
+                </tr>
 
-          <p style="font-size: 13px; line-height: 1.7; color: #52525b; margin-bottom: 28px;">
-            Dear ${recipientName},<br/><br/>
-            Thank you for requesting entry to the Mozart Private Studio. To confirm your account and finalize your membership privilege, please confirm your email address by clicking the button below:
-          </p>
+                <!-- Main Card -->
+                <tr>
+                  <td align="center">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e7e7e5; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);">
+                      <tr>
+                        <td class="card-content" style="padding: 48px 44px;">
+                          <!-- Badge -->
+                          <div style="text-align: center; margin-bottom: 16px;">
+                            <span style="font-family: monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #71717a; background-color: #f4f4f2; padding: 5px 14px; border: 1px solid #e4e4e2; display: inline-block;">
+                              STUDIO PRIVILEGE ACTIVATION
+                            </span>
+                          </div>
 
-          <div style="text-align: center; margin: 36px 0;">
-            <a href="${confirmLink}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #09090b; color: #fafaf8; padding: 18px 36px; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; border: 1px solid #09090b;">
-              Confirm Account &amp; Activate &rarr;
-            </a>
-          </div>
+                          <!-- Heading -->
+                          <div style="text-align: center; margin-bottom: 24px;">
+                            <h1 style="margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: #09090b;">
+                              Confirm Your Account
+                            </h1>
+                            <div style="width: 36px; height: 1px; background-color: #09090b; margin: 18px auto 0 auto; opacity: 0.2;"></div>
+                          </div>
 
-          <p style="font-size: 11px; line-height: 1.6; color: #71717a; margin-bottom: 24px; text-align: center;">
-            If the button above does not work, copy and paste this link into your browser:<br/>
-            <a href="${confirmLink}" style="color: #09090b; word-break: break-all; text-decoration: underline;">
-              ${confirmLink}
-            </a>
-          </p>
+                          <!-- Body -->
+                          <div style="font-size: 14px; line-height: 1.75; color: #3f3f46; margin-bottom: 32px;">
+                            <p style="margin: 0 0 16px 0; font-weight: 500; color: #18181b;">
+                              Dear ${recipientName},
+                            </p>
+                            <p style="margin: 0; font-weight: 300; color: #52525b;">
+                              Thank you for requesting entry to the <strong>MOZART Private Studio</strong>. To authenticate your patron profile and finalize your membership registration, please confirm your email address:
+                            </p>
+                          </div>
 
-          <p style="font-size: 11px; line-height: 1.6; color: #a1a1aa; margin-top: 28px; border-top: 1px solid #f4f4f5; pt-4; text-align: center;">
-            This confirmation link will remain valid for 24 hours. If you did not create a Mozart account, please disregard this transmission.
-          </p>
+                          <!-- Button -->
+                          <div style="text-align: center; margin-bottom: 36px;">
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                              <tr>
+                                <td align="center" bgcolor="#09090b" style="background-color: #09090b; border: 1px solid #09090b;">
+                                  <a class="cta-button" href="${confirmLink}" target="_blank" rel="noopener noreferrer" style="font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: #fafaf8; text-decoration: none; padding: 18px 40px; display: inline-block;">
+                                    Confirm Account &amp; Activate &rarr;
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
 
-          <div style="border-top: 1px solid #f0f0f0; padding-top: 24px; margin-top: 24px; text-align: center; font-size: 10px; color: #a1a1aa; letter-spacing: 0.15em; text-transform: uppercase;">
-            12 Vendome Square, 75001 Paris, France<br/>
-            © ${new Date().getFullYear()} MOZART STUDIO. ALL RIGHTS RESERVED.
-          </div>
-        </div>
-      </div>
+                          <!-- Perks -->
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#fafaf8" style="background-color: #fafaf8; border: 1px solid #eeeeea; margin-bottom: 32px;">
+                            <tr>
+                              <td style="padding: 22px 26px;">
+                                <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #71717a; display: block; margin-bottom: 12px;">
+                                  Patron Privileges Included
+                                </span>
+                                <div style="font-size: 12px; color: #3f3f46; line-height: 1.8; font-weight: 300;">
+                                  • &nbsp;Priority access to seasonal haute couture collections &amp; runway releases<br/>
+                                  • &nbsp;Bespoke salon fittings at Paris Flagship &amp; Milan Showrooms<br/>
+                                  • &nbsp;Direct concierge styling assistance and insured global courier delivery
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+
+                          <!-- Fallback link -->
+                          <div style="font-size: 11px; line-height: 1.6; color: #71717a; border-top: 1px solid #f0f0ee; padding-top: 24px;">
+                            <p style="margin: 0 0 6px 0;">
+                              If you encounter any difficulty with the button above, copy and paste this URL into your browser:
+                            </p>
+                            <p style="margin: 0; word-break: break-all;">
+                              <a href="${confirmLink}" style="color: #09090b; text-decoration: underline; font-family: monospace; font-size: 11px;">
+                                ${confirmLink}
+                              </a>
+                            </p>
+                          </div>
+
+                          <div style="padding-top: 20px; font-size: 11px; color: #a1a1aa; line-height: 1.5; font-weight: 300;">
+                            This confidential link will expire in 24 hours. If you did not create an account on MOZART, no further action is required.
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td align="center" style="padding-top: 36px; padding-bottom: 24px;">
+                    <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #a1a1aa; line-height: 1.9; text-align: center;">
+                      <span style="color: #71717a; font-weight: 600;">MOZART HAUTE COUTURE</span><br/>
+                      12 Place Vendôme, 75001 Paris, France<br/>
+                      © ${new Date().getFullYear()} MOZART STUDIO • All Rights Reserved<br/>
+                      <span style="font-size: 9px; color: #c4c4c0; letter-spacing: 0.15em;">CONFIDENTIAL ATELIER TRANSMISSION</span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `;
 
     // Check if real Gmail SMTP credentials exist
