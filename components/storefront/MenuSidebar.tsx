@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, X } from "lucide-react";
 
 interface SubItem {
   name: string;
@@ -57,17 +56,16 @@ export default function MenuSidebar({
     <>
       {/*
         ─────────────────────────────────────────────────────────────
-        BACKDROP OVERLAY
-        Independent opacity animation: ~350ms cubic-bezier(0.22, 1, 0.36, 1)
-        Sits above the page content, below the drawer and navbar (z-40).
+        BACKDROP OVERLAY (vivetofficial.com style)
+        Independent opacity transition: ~300ms
         ─────────────────────────────────────────────────────────────
       */}
       <div
         onClick={onClose}
         style={{
-          transition: "opacity 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "opacity 300ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
-        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] ${
+        className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -75,88 +73,46 @@ export default function MenuSidebar({
 
       {/*
         ─────────────────────────────────────────────────────────────
-        SIDEBAR DRAWER LAYER
-        Independent fixed-position layer above the page:
-        position: fixed; top: 0; left: 0; height: 100dvh; z-index: 45;
-        Animates ONLY via transform: translate3d(-100%, 0, 0) → (0, 0, 0)
-        with GPU compositing and cubic-bezier(0.22, 1, 0.36, 1).
+        SIDEBAR COLUMN (vivetofficial.com style)
+        Independent fixed-position layer on the left:
+        Smooth, clean, minimalist subcategories list directly below navbar.
+        Animates via transform: translate3d(-100%, 0, 0) → translate3d(0, 0, 0)
         ─────────────────────────────────────────────────────────────
       */}
       <aside
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
-          transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           willChange: "transform",
         }}
-        className={`fixed top-0 left-0 h-[100dvh] z-45 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
+        className={`fixed top-0 left-0 h-[100dvh] z-40 w-72 md:w-80 bg-[#fafaf8] border-r border-black/[0.06] shadow-xl flex flex-col pt-28 md:pt-32 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
-        aria-label="Navigation Menu"
+        aria-label="Sub-navigation Menu"
       >
-        {/* Top spacer & category indicator header - sits cleanly below the sticky navbar */}
-        <div className="pt-28 px-8 pb-4 flex items-center justify-between border-b border-black/[0.05]">
-          <span className="text-[11px] tracking-[0.25em] uppercase font-semibold text-neutral-400">
-            {activeCategory === "women" ? "Women's Collection" : "Men's Collection"}
-          </span>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close menu"
-            className="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-200/60"
-          >
-            <X size={18} strokeWidth={1.5} />
-          </button>
-        </div>
-
-        {/* Main Links Body */}
-        <div className="flex-1 px-8 py-8 flex flex-col justify-center overflow-y-auto">
-          <nav className="space-y-6">
+        {/* Clean, minimalist subcategory links exactly like Vivet */}
+        <div className="px-8 py-6">
+          <nav className="flex flex-col space-y-4">
             {links.map((item, idx) => (
-              <div
+              <Link
                 key={item.name}
+                href={item.href}
+                onClick={onClose}
                 style={{
-                  transitionDelay: isOpen ? `${idx * 40 + 60}ms` : "0ms",
+                  transitionDelay: isOpen ? `${idx * 25 + 40}ms` : "0ms",
                 }}
-                className={`transform transition-all duration-500 ease-out ${
+                className={`text-[11px] md:text-[12px] uppercase tracking-[0.2em] font-medium text-neutral-500 hover:text-black transition-all duration-300 ${
                   isOpen
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-4"
+                    : "opacity-0 -translate-x-2"
                 }`}
               >
-                <Link
-                  href={item.href}
-                  onClick={onClose}
-                  className="group flex items-center justify-between py-1 text-[13px] md:text-[14px] font-sans font-medium tracking-[0.2em] text-neutral-900 hover:text-black transition-all"
-                >
-                  <span className="relative">
-                    {item.name}
-                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full" />
-                  </span>
-                  <ArrowRight
-                    size={14}
-                    className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-neutral-400 group-hover:text-black"
-                  />
-                </Link>
-              </div>
+                {item.name}
+              </Link>
             ))}
           </nav>
-        </div>
-
-        {/* Bottom Drawer Footer: Editorial Studio Note */}
-        <div className="px-8 py-8 border-t border-black/[0.06] bg-[#f4f3ee]/60">
-          <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-500 font-semibold mb-2">
-            <Sparkles size={12} className="text-neutral-700" />
-            <span>MOZART High Fashion</span>
-          </div>
-          <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
-            Curated seasonal collections crafted in Biella, Florence, and Paris. Handcrafted in strictly numbered editions.
-          </p>
-          <div className="mt-4 pt-4 border-t border-black/[0.05] flex items-center justify-between text-[10px] font-mono tracking-widest text-neutral-400">
-            <span>PARIS STUDIO</span>
-            <span>12 VENDOME SQUARE</span>
-          </div>
         </div>
       </aside>
     </>

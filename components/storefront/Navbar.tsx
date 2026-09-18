@@ -60,11 +60,6 @@ export default function Navbar() {
     }, 180);
   };
 
-  const handleClickNav = (cat: "women" | "men") => {
-    setSidebarCategory(cat);
-    setSidebarOpen(true);
-  };
-
   // Determine active underline indicator:
   // While sidebar is open, highlight the active category in the sidebar.
   // While closed, highlight the current route.
@@ -81,11 +76,9 @@ export default function Navbar() {
   return (
     <>
       {/*
-        ─────────────────────────────────────────────────────────────
         PERMANENT, STATIC NAVBAR HEADER
-        z-index: 50 — sits above the sidebar drawer layer (z-45).
+        z-index: 50 — sits above the sidebar layer (z-40) and backdrop (z-30).
         Dimensions, layout, font sizes, and positions NEVER move or resize.
-        ─────────────────────────────────────────────────────────────
       */}
       <header className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
@@ -101,7 +94,7 @@ export default function Navbar() {
               href="/women"
               onMouseEnter={() => handleMouseEnterNav("women")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={() => handleClickNav("women")}
+              onClick={() => setSidebarOpen(false)}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("women")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
@@ -115,7 +108,7 @@ export default function Navbar() {
               href="/men"
               onMouseEnter={() => handleMouseEnterNav("men")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={() => handleClickNav("men")}
+              onClick={() => setSidebarOpen(false)}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("men")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
@@ -202,11 +195,8 @@ export default function Navbar() {
       </header>
 
       {/*
-        ─────────────────────────────────────────────────────────────
-        INDEPENDENT FIXED-POSITION SIDEBAR DRAWER LAYER
-        Slides in smoothly from the left (GPU transform: translate3d)
-        with independent overlay dimming.
-        ─────────────────────────────────────────────────────────────
+        INDEPENDENT VIVET-STYLE SIDEBAR
+        Slides smoothly from left under the sticky navbar
       */}
       <MenuSidebar
         isOpen={sidebarOpen}
