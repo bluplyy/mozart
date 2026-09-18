@@ -102,25 +102,25 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-12 gap-16 items-start">
         {/* Left Column: High-Res Editorial Gallery (7 cols) */}
         <div className="col-span-7 space-y-8">
-          {/* Main Hero Shot */}
-          <div className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm">
-            <img
-              src={product.image_url}
-              alt={product.title}
-              className="w-full h-full object-cover object-center"
-            />
-          </div>
+          {(() => {
+            const galleryImages =
+              product.images && product.images.length > 0
+                ? product.images
+                : [product.image_url, ...(product.secondary_image_url ? [product.secondary_image_url] : [])].filter(Boolean);
 
-          {/* Secondary Lookbook Shot if available */}
-          {product.secondary_image_url && (
-            <div className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm">
-              <img
-                src={product.secondary_image_url}
-                alt={`${product.title} silhouette`}
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-          )}
+            return galleryImages.map((imgSrc, index) => (
+              <div key={index} className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm relative group">
+                <img
+                  src={imgSrc}
+                  alt={`${product.title} view ${index + 1}`}
+                  className="w-full h-full object-cover object-center"
+                />
+                <span className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[9px] tracking-[0.2em] uppercase px-2.5 py-1 font-mono">
+                  LOOK 0{index + 1}
+                </span>
+              </div>
+            ));
+          })()}
         </div>
 
         {/* Right Column: Sticky Purchasing Details (5 cols) */}

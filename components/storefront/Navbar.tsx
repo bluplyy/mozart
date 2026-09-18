@@ -64,9 +64,6 @@ export default function Navbar() {
             <span className="font-serif text-3xl md:text-4xl tracking-[0.35em] text-[#09090b] uppercase font-normal select-none">
               MOZART
             </span>
-            <span className="text-[9px] tracking-[0.35em] uppercase text-neutral-400 font-sans mt-0.5 -mr-[0.35em]">
-              Haute Couture • Paris
-            </span>
           </Link>
         </div>
 

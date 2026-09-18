@@ -77,15 +77,9 @@ export default function MenCollectionPage() {
           <span className="font-serif text-3xl uppercase tracking-widest text-neutral-400 block mb-3">
             No Men's Pieces Active
           </span>
-          <p className="text-[12px] uppercase tracking-wider text-neutral-500 mb-6">
-            New seasonal pieces can be published via the Studio / Admin portal.
+          <p className="text-[12px] uppercase tracking-wider text-neutral-500">
+            Please check back soon for our next seasonal curation.
           </p>
-          <Link
-            href="/admin"
-            className="inline-block bg-black text-white text-[11px] tracking-[0.25em] uppercase py-3.5 px-8"
-          >
-            Open Admin Studio
-          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-x-8 gap-y-16">

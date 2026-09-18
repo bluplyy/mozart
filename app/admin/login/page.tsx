@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ShieldCheck, Lock, Mail, ArrowRight, Sparkles, ArrowLeft } from "lucide-react";
+import { ShieldCheck, Lock, Mail, ArrowRight, ArrowLeft } from "lucide-react";
 
 export default function AdminLoginPage() {
   const { signIn, isAuthenticated, role } = useAuth();
@@ -31,20 +31,6 @@ export default function AdminLoginPage() {
         router.push("/admin");
       } else {
         setError(res.error || "Access denied. Invalid curator credentials.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDemoCurator = async () => {
-    setEmail("admin@mozart.com");
-    setPassword("atelier2026");
-    setLoading(true);
-    try {
-      const res = await signIn("admin@mozart.com", "atelier2026", "admin");
-      if (res.success) {
-        router.push("/admin");
       }
     } finally {
       setLoading(false);
@@ -132,22 +118,6 @@ export default function AdminLoginPage() {
             <ArrowRight size={14} />
           </button>
         </form>
-
-        {/* 1-Click Demo Curator Access */}
-        <div className="mt-8 pt-6 border-t border-neutral-800 text-center">
-          <button
-            type="button"
-            onClick={handleDemoCurator}
-            disabled={loading}
-            className="w-full border border-neutral-700 hover:border-neutral-500 text-[11px] tracking-[0.2em] uppercase text-neutral-300 py-3 px-4 flex items-center justify-center space-x-2 transition-all hover:bg-neutral-800"
-          >
-            <Sparkles size={13} className="text-amber-400" />
-            <span>1-Click Demo Curator Login</span>
-          </button>
-          <span className="text-[10px] text-neutral-500 mt-2 block font-mono">
-            Default: admin@mozart.com / atelier2026
-          </span>
-        </div>
       </div>
 
       {/* Footer info */}

@@ -71,11 +71,6 @@ export default function Footer() {
                   Permanent Archive
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="hover:text-white text-neutral-500 transition-colors">
-                  Curator Access (Admin)
-                </Link>
-              </li>
             </ul>
           </div>
 

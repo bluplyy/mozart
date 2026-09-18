@@ -120,6 +120,7 @@ export async function createProduct(newProduct: Omit<Product, "id"> & { id?: str
   const productToSave: Product = {
     ...newProduct,
     id,
+    images: newProduct.images || (newProduct.image_url ? [newProduct.image_url, ...(newProduct.secondary_image_url ? [newProduct.secondary_image_url] : [])] : []),
     created_at: new Date().toISOString(),
   };
 

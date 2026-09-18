@@ -7,6 +7,7 @@ export interface Product {
   price: number;
   image_url: string;
   secondary_image_url?: string;
+  images?: string[];
   description: string;
   details?: string;
   created_at?: string;

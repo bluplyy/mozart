@@ -25,37 +25,24 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
         </div>
 
-        {/* Hero Copy & Navigation */}
+        {/* Hero Navigation */}
         <div className="relative h-full max-w-[1720px] mx-auto px-8 flex flex-col justify-end pb-20 text-white">
-          <div className="max-w-3xl">
-            <span className="text-[11px] uppercase tracking-[0.35em] text-neutral-300 font-medium block mb-4">
-              Autumn / Winter Salon Collection
-            </span>
-            <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl tracking-[0.1em] uppercase font-normal leading-[0.95] mb-8">
-              The Architecture <br />
-              <span className="italic font-light">of Silhouette</span>
-            </h1>
-            <p className="text-neutral-300 text-[14px] leading-relaxed max-w-lg font-light tracking-wide mb-10">
-              An unyielding exploration of monolithic volume, pure Italian wools, and Parisian discipline. Conceived in silence at 12 Place Vendôme.
-            </p>
+          <div className="flex items-center space-x-6">
+            <Link
+              href="/men"
+              className="bg-white text-black hover:bg-neutral-200 text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-colors"
+            >
+              <span>Discover Men</span>
+              <ArrowRight size={14} />
+            </Link>
 
-            <div className="flex items-center space-x-6">
-              <Link
-                href="/men"
-                className="bg-white text-black hover:bg-neutral-200 text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-colors"
-              >
-                <span>Discover Men</span>
-                <ArrowRight size={14} />
-              </Link>
-
-              <Link
-                href="/women"
-                className="border border-white/70 hover:border-white text-white hover:bg-white hover:text-black text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-all"
-              >
-                <span>Discover Women</span>
-                <ArrowRight size={14} />
-              </Link>
-            </div>
+            <Link
+              href="/women"
+              className="border border-white/70 hover:border-white text-white hover:bg-white hover:text-black text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-all"
+            >
+              <span>Discover Women</span>
+              <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>

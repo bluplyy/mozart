@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Product, Category } from "@/lib/types";
 import { X, Sparkles, Image as ImageIcon } from "lucide-react";
+import ProductImageManager from "./ProductImageManager";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -10,39 +11,6 @@ interface ProductModalProps {
   onSave: (productData: Omit<Product, "id"> & { id?: string }) => Promise<void>;
   initialData?: Product | null;
 }
-
-const PRESET_IMAGES = [
-  {
-    label: "Men - Cashmere Coat",
-    url: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
-    category: "Men" as Category,
-  },
-  {
-    label: "Men - Silk Shirt",
-    url: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=1200&auto=format&fit=crop",
-    category: "Men" as Category,
-  },
-  {
-    label: "Men - Leather Boots",
-    url: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?q=80&w=1200&auto=format&fit=crop",
-    category: "Men" as Category,
-  },
-  {
-    label: "Women - Silk Column Gown",
-    url: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200&auto=format&fit=crop",
-    category: "Women" as Category,
-  },
-  {
-    label: "Women - Tailored Blazer",
-    url: "https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=1200&auto=format&fit=crop",
-    category: "Women" as Category,
-  },
-  {
-    label: "Women - Monogram Leather Bag",
-    url: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1200&auto=format&fit=crop",
-    category: "Women" as Category,
-  },
-];
 
 export default function ProductModal({
   isOpen,
@@ -53,8 +21,7 @@ export default function ProductModal({
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category>("Men");
   const [price, setPrice] = useState<string>("1500");
-  const [imageUrl, setImageUrl] = useState("");
-  const [secondaryImageUrl, setSecondaryImageUrl] = useState("");
+  const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [details, setDetails] = useState("");
   const [saving, setSaving] = useState(false);
@@ -65,16 +32,26 @@ export default function ProductModal({
       setTitle(initialData.title);
       setCategory(initialData.category);
       setPrice(initialData.price.toString());
-      setImageUrl(initialData.image_url);
-      setSecondaryImageUrl(initialData.secondary_image_url || "");
+      
+      // Populate images array from initialData
+      if (initialData.images && initialData.images.length > 0) {
+        setImages(initialData.images);
+      } else {
+        const list: string[] = [];
+        if (initialData.image_url) list.push(initialData.image_url);
+        if (initialData.secondary_image_url) list.push(initialData.secondary_image_url);
+        setImages(list);
+      }
+      
       setDescription(initialData.description);
       setDetails(initialData.details || "");
     } else {
       setTitle("");
       setCategory("Men");
       setPrice("2200");
-      setImageUrl(PRESET_IMAGES[0].url);
-      setSecondaryImageUrl("");
+      setImages([
+        "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
+      ]);
       setDescription("Sculpted with pure architectural discipline. Unlined interior with contrast hand-stitching.");
       setDetails("100% Virgin Wool • Made in Italy");
     }
@@ -89,8 +66,8 @@ export default function ProductModal({
       setError("Product title is required.");
       return;
     }
-    if (!imageUrl.trim()) {
-      setError("Product image URL is required.");
+    if (images.length === 0) {
+      setError("Minimal satu foto produk harus diupload.");
       return;
     }
     const numPrice = parseFloat(price);
@@ -102,13 +79,17 @@ export default function ProductModal({
     setSaving(true);
     setError(null);
     try {
+      const primaryImage = images[0];
+      const secondaryImage = images.length > 1 ? images[1] : undefined;
+
       await onSave({
         id: initialData?.id,
         title: title.trim(),
         category,
         price: numPrice,
-        image_url: imageUrl.trim(),
-        secondary_image_url: secondaryImageUrl.trim() || undefined,
+        image_url: primaryImage,
+        secondary_image_url: secondaryImage,
+        images: images,
         description: description.trim(),
         details: details.trim() || undefined,
       });
@@ -121,8 +102,8 @@ export default function ProductModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
-      <div className="bg-[#fafaf8] max-w-2xl w-full border border-neutral-300 shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 md:p-6">
+      <div className="bg-[#fafaf8] max-w-3xl w-full border border-neutral-300 shadow-2xl relative my-8">
         {/* Header */}
         <div className="px-8 py-6 border-b border-black/[0.08] flex items-center justify-between">
           <div>
@@ -142,7 +123,7 @@ export default function ProductModal({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-8 space-y-6 max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-8 space-y-6 max-h-[82vh] overflow-y-auto">
           {error && (
             <div className="bg-red-50 border-l-2 border-red-800 p-3 text-[12px] text-red-800 font-medium">
               {error}
@@ -165,7 +146,7 @@ export default function ProductModal({
           </div>
 
           {/* Category & Price Grid */}
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Strict Category: Men vs Women */}
             <div>
               <label className="block text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold mb-2">
@@ -210,78 +191,12 @@ export default function ProductModal({
             </div>
           </div>
 
-          {/* Main Image URL */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold">
-                Primary Image URL *
-              </label>
-              <span className="text-[10px] uppercase tracking-wider text-neutral-400 flex items-center gap-1">
-                <ImageIcon size={12} /> High-Resolution 3:4 Recommended
-              </span>
-            </div>
-            <input
-              type="url"
-              required
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://images.unsplash.com/..."
-              className="w-full bg-white border border-neutral-300 px-4 py-3 text-[12px] text-neutral-900 focus:border-black outline-none font-mono"
-            />
-
-            {/* Preset lookbook selector */}
-            <div className="mt-2.5">
-              <span className="text-[10px] tracking-widest uppercase text-neutral-400 block mb-1.5 flex items-center gap-1">
-                <Sparkles size={11} /> Quick Select Curated Look:
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {PRESET_IMAGES.map((preset, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setImageUrl(preset.url);
-                      setCategory(preset.category);
-                    }}
-                    className="text-[10px] tracking-wider uppercase px-2 py-1 bg-neutral-200/80 hover:bg-black hover:text-white transition-colors"
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Live thumbnail preview */}
-            {imageUrl && (
-              <div className="mt-3 flex items-center space-x-3 p-2 bg-neutral-100/80 border border-neutral-200">
-                <div className="w-14 h-18 bg-neutral-200 overflow-hidden shrink-0 aspect-[3/4]">
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = "none";
-                    }}
-                  />
-                </div>
-                <div className="text-[11px] text-neutral-500 font-light truncate">
-                  Live Thumbnail Preview Active
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Secondary Image URL */}
-          <div>
-            <label className="block text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold mb-2">
-              Secondary Lookbook Image URL (Optional Hover Effect)
-            </label>
-            <input
-              type="url"
-              value={secondaryImageUrl}
-              onChange={(e) => setSecondaryImageUrl(e.target.value)}
-              placeholder="https://images.unsplash.com/... (detail view)"
-              className="w-full bg-white border border-neutral-300 px-4 py-3 text-[12px] text-neutral-900 focus:border-black outline-none font-mono"
+          {/* Photo Manager (Upload, Drag & Drop, Reorder, Delete) - Replaces manual URL textboxes */}
+          <div className="p-5 bg-white border border-neutral-200">
+            <ProductImageManager
+              images={images}
+              onChange={setImages}
+              disabled={saving}
             />
           </div>
 

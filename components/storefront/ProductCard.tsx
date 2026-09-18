@@ -37,28 +37,36 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <Link href={`/product/${product.id}`} className="block overflow-hidden bg-[#f0eee9] relative aspect-[3/4]">
         {/* Main image */}
-        <img
-          src={product.image_url}
-          alt={product.title}
-          className={`w-full h-full object-cover object-center transform transition-all duration-700 ease-out ${
-            product.secondary_image_url && isHovered
-              ? "opacity-0 scale-105"
-              : "opacity-100 scale-100 group-hover:scale-105"
-          }`}
-          loading="lazy"
-        />
+        {(() => {
+          const primaryImg = product.images?.[0] || product.image_url;
+          const secondaryImg = product.images?.[1] || product.secondary_image_url;
+          return (
+            <>
+              <img
+                src={primaryImg}
+                alt={product.title}
+                className={`w-full h-full object-cover object-center transform transition-all duration-700 ease-out ${
+                  secondaryImg && isHovered
+                    ? "opacity-0 scale-105"
+                    : "opacity-100 scale-100 group-hover:scale-105"
+                }`}
+                loading="lazy"
+              />
 
-        {/* Secondary image on hover if available */}
-        {product.secondary_image_url && (
-          <img
-            src={product.secondary_image_url}
-            alt={`${product.title} detail view`}
-            className={`absolute inset-0 w-full h-full object-cover object-center transform transition-all duration-700 ease-out ${
-              isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
-            loading="lazy"
-          />
-        )}
+              {/* Secondary image on hover if available */}
+              {secondaryImg && (
+                <img
+                  src={secondaryImg}
+                  alt={`${product.title} detail view`}
+                  className={`absolute inset-0 w-full h-full object-cover object-center transform transition-all duration-700 ease-out ${
+                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  }`}
+                  loading="lazy"
+                />
+              )}
+            </>
+          );
+        })()}
 
         {/* Category Pill Tag */}
         <div className="absolute top-4 left-4">

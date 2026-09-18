@@ -106,7 +106,7 @@ export default function ProductTable({
                   <td className="py-3 px-6">
                     <div className="w-14 h-18 bg-[#ebe8e2] overflow-hidden aspect-[3/4] border border-black/10">
                       <img
-                        src={p.image_url}
+                        src={p.images?.[0] || p.image_url}
                         alt={p.title}
                         className="w-full h-full object-cover"
                         loading="lazy"
