@@ -83,7 +83,7 @@ export default function Navbar() {
       {/*
         ─────────────────────────────────────────────────────────────
         PERMANENT, STATIC NAVBAR HEADER
-        z-index: 40 — sits below the sidebar drawer layer (z-60).
+        z-index: 50 — sits above the sidebar drawer layer (z-45).
         Dimensions, layout, font sizes, and positions NEVER move or resize.
         ─────────────────────────────────────────────────────────────
       */}

@@ -59,14 +59,14 @@ export default function MenuSidebar({
     <>
       {/*
         ─────────────────────────────────────────────────────────────
-        BACKDROP OVERLAY (z-50)
-        Dims page and navbar smoothly behind the drawer.
+        BACKDROP OVERLAY
+        Independent opacity animation (~260ms), sits at z-50 above navbar (z-40)
         ─────────────────────────────────────────────────────────────
       */}
       <div
         onClick={onClose}
         style={{
-          transition: "opacity 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "opacity 260ms ease-out",
         }}
         className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -76,27 +76,27 @@ export default function MenuSidebar({
 
       {/*
         ─────────────────────────────────────────────────────────────
-        SIDEBAR DRAWER LAYER (z-60)
-        Located ABOVE the navbar (z-40) and backdrop (z-50).
-        Slides in smoothly from the left via GPU transform translate3d.
+        SIDEBAR DRAWER LAYER
+        Located ABOVE the navbar: z-60 (higher than z-40 navbar and z-50 backdrop).
+        Animates swiftly from left to right via transform: translate3d.
         ─────────────────────────────────────────────────────────────
       */}
       <aside
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
-          transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "transform 320ms cubic-bezier(0.16, 1, 0.3, 1)",
           willChange: "transform",
         }}
-        className={`fixed top-0 left-0 h-[100dvh] z-60 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
+        className={`fixed top-0 left-0 h-[100dvh] z-[60] w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
         aria-label="Navigation Menu"
       >
-        {/* Top bar: Category Switcher & Close button - sits on top of navbar area */}
+        {/* Top bar: Category tabs + Close button located right at the top */}
         <div className="px-8 pt-8 pb-6 flex items-center justify-between border-b border-black/[0.06]">
-          <div className="flex items-center space-x-7 text-[12px] tracking-[0.2em] uppercase font-medium">
+          <div className="flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium">
             <button
               type="button"
               onClick={() => onSwitchCategory?.("women")}
@@ -138,12 +138,12 @@ export default function MenuSidebar({
               <div
                 key={item.name}
                 style={{
-                  transitionDelay: isOpen ? `${idx * 40 + 60}ms` : "0ms",
+                  transitionDelay: isOpen ? `${idx * 25 + 30}ms` : "0ms",
                 }}
-                className={`transform transition-all duration-500 ease-out ${
+                className={`transform transition-all duration-300 ease-out ${
                   isOpen
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-4"
+                    : "opacity-0 -translate-x-3"
                 }`}
               >
                 <Link
