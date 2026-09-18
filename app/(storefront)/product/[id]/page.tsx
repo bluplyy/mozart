@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useProducts } from "@/context/ProductContext";
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -14,6 +14,88 @@ import {
   Minus,
   Heart,
 } from "lucide-react";
+
+/**
+ * Bi-directional sticky hook for luxury PDP right column.
+ *
+ * Both columns scroll together with natural page scroll.
+ * When the right column's content is taller than the available viewport:
+ *   - Scrolling DOWN: right column scrolls up until its bottom aligns with
+ *     the viewport bottom, then sticks there while the left gallery continues.
+ *   - Scrolling UP: right column scrolls down until its top aligns with the
+ *     header bottom, then sticks there while the left gallery continues.
+ *
+ * When right column fits within the viewport, simple top-sticky is used.
+ *
+ * No scroll-jacking, no fake parallax, no arbitrary multipliers.
+ * Uses a single passive scroll listener with no React state updates.
+ */
+function useBidirectionalSticky(enabled: boolean) {
+  const ref = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
+  const currentTopRef = useRef<number | null>(null);
+
+  const onScroll = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const headerHeight =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--header-height"
+        )
+      ) || 111;
+    const viewportHeight = window.innerHeight;
+    const elHeight = el.getBoundingClientRect().height;
+    const availableHeight = viewportHeight - headerHeight;
+
+    // If the content fits in the viewport, pin at the top
+    if (elHeight <= availableHeight) {
+      el.style.top = `${headerHeight}px`;
+      currentTopRef.current = headerHeight;
+      lastScrollY.current = window.scrollY;
+      return;
+    }
+
+    // Bi-directional sticky: clamp the top value between two bounds
+    const maxTop = headerHeight; // top-aligned (scrolling up)
+    const minTop = viewportHeight - elHeight; // bottom-aligned (scrolling down)
+
+    const scrollY = window.scrollY;
+    const delta = scrollY - lastScrollY.current;
+    lastScrollY.current = scrollY;
+
+    // Initialize currentTop on first scroll
+    if (currentTopRef.current === null) {
+      currentTopRef.current = maxTop;
+    }
+
+    // Adjust top by the scroll delta, clamped within bounds
+    let newTop = currentTopRef.current - delta;
+    newTop = Math.max(minTop, Math.min(maxTop, newTop));
+    currentTopRef.current = newTop;
+
+    el.style.top = `${newTop}px`;
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    // Initial measurement
+    lastScrollY.current = window.scrollY;
+    onScroll();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [enabled, onScroll]);
+
+  return ref;
+}
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -28,6 +110,18 @@ export default function ProductDetailPage() {
   const [added, setAdded] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // Detect desktop for bi-directional sticky
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const infoRef = useBidirectionalSticky(isDesktop);
 
   const toggleSection = (section: string) => {
     setOpenSection((prev) => (prev === section ? null : section));
@@ -74,12 +168,17 @@ export default function ProductDetailPage() {
   }).format(product.price);
 
   const SIZES = ["L", "XL", "M", "S", "XS"];
-  const availableSizesList = product.available_sizes || ["L", "XL", "M", "S", "XS"];
+  const availableSizesList = product.available_sizes || [
+    "L",
+    "XL",
+    "M",
+    "S",
+    "XS",
+  ];
 
-  // Initialize selectedSize to first available size if current is not available
   const currentSize = availableSizesList.includes(selectedSize)
     ? selectedSize
-    : (availableSizesList[0] || "M");
+    : availableSizesList[0] || "M";
 
   const handleAdd = () => {
     addToCart(product, currentSize);
@@ -101,7 +200,9 @@ export default function ProductDetailPage() {
     }
     const base = [
       product.image_url,
-      ...(product.secondary_image_url ? [product.secondary_image_url] : []),
+      ...(product.secondary_image_url
+        ? [product.secondary_image_url]
+        : []),
     ].filter(Boolean) as string[];
 
     if (base.length === 1) {
@@ -153,12 +254,18 @@ export default function ProductDetailPage() {
         </button>
       </div>
 
-      {/* Split-Screen Product Layout: Two Independent Content Columns */}
+      {/*
+        Split-Screen Product Layout
+        Both columns scroll together with normal page scroll.
+        The right column uses position: sticky with a dynamically
+        calculated top value (bi-directional sticky) so it naturally
+        stops at the top or bottom edge of the viewport.
+      */}
       <main className="product-layout flex flex-col lg:flex-row gap-10 xl:gap-16 items-start">
         {/*
           LEFT COLUMN: Product Media / Gallery
           - Multiple product images stacked vertically
-          - Natural content height
+          - Natural content height, drives the overall page scroll length
           - Responsive width, stable aspect ratio (3:4)
         */}
         <section
@@ -185,14 +292,16 @@ export default function ProductDetailPage() {
 
         {/*
           RIGHT COLUMN: Product Information Panel
-          - Sticky desktop positioning relative to dynamic --header-height
-          - Independent vertical scroll with overscroll-behavior: contain
-          - Single source of truth for all details, CTA, and accordions
-          - Falls back gracefully to normal flowing column on mobile
+          - Uses bi-directional sticky: scrolls WITH the page naturally,
+            sticks at bottom when scrolling down, sticks at top when scrolling up.
+          - NO separate scroll container, NO overflow-y, NO independent scrolling.
+          - align-self: flex-start ensures correct sticky behavior in flex layout.
+          - On mobile (<lg), falls back to normal flowing column.
         */}
         <aside
+          ref={infoRef}
           aria-label="Product Information"
-          className="product-information w-full lg:w-[42%] xl:w-[40%] space-y-8 lg:py-2 lg:pr-3"
+          className="product-information w-full lg:w-[42%] xl:w-[40%] lg:sticky lg:self-start space-y-8 lg:py-2 lg:pr-3"
         >
           {/* Header & Title with Wishlist Icon */}
           <div>
@@ -210,7 +319,9 @@ export default function ProductDetailPage() {
               <button
                 type="button"
                 onClick={() => setIsWishlisted(!isWishlisted)}
-                aria-label={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+                aria-label={
+                  isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"
+                }
                 title={isWishlisted ? "In your Wishlist" : "Add to Wishlist"}
                 className={`p-2.5 rounded-full border transition-all shrink-0 ${
                   isWishlisted
@@ -240,7 +351,10 @@ export default function ProductDetailPage() {
           <div>
             <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
               <span className="font-semibold text-neutral-800">
-                Color: <span className="font-normal text-neutral-500">{selectedColor}</span>
+                Color:{" "}
+                <span className="font-normal text-neutral-500">
+                  {selectedColor}
+                </span>
               </span>
             </div>
 
@@ -269,7 +383,9 @@ export default function ProductDetailPage() {
           {/* Size Selector */}
           <div>
             <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
-              <span className="font-semibold text-neutral-800">Select Size</span>
+              <span className="font-semibold text-neutral-800">
+                Select Size
+              </span>
               <span className="text-neutral-400 text-[10px] underline cursor-pointer hover:text-black">
                 Size Guide
               </span>
@@ -335,7 +451,8 @@ export default function ProductDetailPage() {
           {/* Digital Advisor Assistance Callout */}
           <div className="pt-2 text-[13px] text-neutral-600 font-light leading-relaxed">
             <p>
-              Contact our Digital Concierge for tailored styling guidance, private salon reservations, or size inquiries.{" "}
+              Contact our Digital Concierge for tailored styling guidance,
+              private salon reservations, or size inquiries.{" "}
               <a
                 href={`https://wa.me/6281234567890?text=${encodeURIComponent(
                   `Hello MOZART Concierge, I have an inquiry regarding ${product.title} (REF: ${product.id.slice(0, 10).toUpperCase()}).`
