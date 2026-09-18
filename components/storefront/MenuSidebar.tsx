@@ -16,6 +16,10 @@ interface MenuSidebarProps {
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onSwitchCategory: (cat: "women" | "men") => void;
+  asideRef?: React.RefObject<HTMLElement | null>;
+  womenRef?: React.RefObject<HTMLButtonElement | null>;
+  menRef?: React.RefObject<HTMLButtonElement | null>;
+  hideMenuItems?: boolean;
 }
 
 const WOMEN_LINKS: SubItem[] = [
@@ -41,6 +45,10 @@ export default function MenuSidebar({
   onMouseEnter,
   onMouseLeave,
   onSwitchCategory,
+  asideRef,
+  womenRef,
+  menRef,
+  hideMenuItems = false,
 }: MenuSidebarProps) {
   // Close on Escape key press
   useEffect(() => {
@@ -69,6 +77,7 @@ export default function MenuSidebar({
 
       {/* Slide-in Drawer from the Left */}
       <aside
+        ref={asideRef}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         className={`fixed top-0 left-0 bottom-0 z-50 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between transform transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -79,25 +88,31 @@ export default function MenuSidebar({
       >
         {/* Top bar: Brand & Close */}
         <div className="px-8 pt-8 pb-6 flex items-center justify-between border-b border-black/[0.06]">
-          <div className="flex items-center space-x-6 text-[12px] tracking-[0.25em] uppercase font-semibold">
+          <div
+            className={`flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium ${
+              hideMenuItems ? "opacity-0 pointer-events-none transition-none" : "opacity-100"
+            }`}
+          >
             <button
+              ref={womenRef}
               type="button"
               onClick={() => onSwitchCategory("women")}
               className={`py-1 transition-colors relative ${
                 category === "women"
-                  ? "text-black after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
+                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
+                  : "text-neutral-500 hover:text-black"
               }`}
             >
               Women
             </button>
             <button
+              ref={menRef}
               type="button"
               onClick={() => onSwitchCategory("men")}
               className={`py-1 transition-colors relative ${
                 category === "men"
-                  ? "text-black after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
+                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
+                  : "text-neutral-500 hover:text-black"
               }`}
             >
               Men
