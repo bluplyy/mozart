@@ -23,8 +23,6 @@ export default function ProductModal({
   const [price, setPrice] = useState<string>("1500");
   const [images, setImages] = useState<string[]>([]);
   const [availableSizes, setAvailableSizes] = useState<string[]>(["XS", "S", "M", "L", "XL"]);
-  const [description, setDescription] = useState("");
-  const [details, setDetails] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,9 +48,6 @@ export default function ProductModal({
         if (initialData.secondary_image_url) list.push(initialData.secondary_image_url);
         setImages(list);
       }
-      
-      setDescription(initialData.description);
-      setDetails(initialData.details || "");
     } else {
       setTitle("");
       setCategory("Men");
@@ -61,8 +56,6 @@ export default function ProductModal({
       setImages([
         "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
       ]);
-      setDescription("Sculpted with pure architectural discipline. Unlined interior with contrast hand-stitching.");
-      setDetails("100% Virgin Wool • Made in Italy");
     }
     setError(null);
   }, [initialData, isOpen]);
@@ -104,8 +97,8 @@ export default function ProductModal({
         secondary_image_url: secondaryImage,
         images: images,
         available_sizes: availableSizes,
-        description: description.trim(),
-        details: details.trim() || undefined,
+        description: initialData?.description || "",
+        details: initialData?.details || undefined,
       });
       onClose();
     } catch (err: any) {
@@ -260,35 +253,6 @@ export default function ProductModal({
             <p className="text-[10px] text-neutral-500 mt-2">
               Ukuran yang ditandai <span className="font-semibold text-black">TERSEDIA</span> akan dapat dipilih dan dibeli oleh pelanggan di halaman produk.
             </p>
-          </div>
-
-          {/* Fabric & Provenance Details */}
-          <div>
-            <label className="block text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold mb-2">
-              Materials, Hardware & Provenance
-            </label>
-            <input
-              type="text"
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-              placeholder="e.g. 100% Cashmere • Horn Buttons • Handcrafted in Biella, Italy"
-              className="w-full bg-white border border-neutral-300 px-4 py-3 text-[13px] text-neutral-900 focus:border-black outline-none"
-            />
-          </div>
-
-          {/* Editorial Description */}
-          <div>
-            <label className="block text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold mb-2">
-              Editorial Description *
-            </label>
-            <textarea
-              required
-              rows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe silhouette, drape, atelier craft, and occasion..."
-              className="w-full bg-white border border-neutral-300 px-4 py-3 text-[13px] text-neutral-900 focus:border-black outline-none leading-relaxed"
-            />
           </div>
 
           {/* Actions */}

@@ -83,14 +83,13 @@ export default function ProductTable({
               <th className="py-4 px-6">Creation & Silhouette</th>
               <th className="py-4 px-6 w-32">Category</th>
               <th className="py-4 px-6 w-32">Price (USD)</th>
-              <th className="py-4 px-6">Materials & Origin</th>
               <th className="py-4 px-6 text-right w-28">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-black/[0.05] text-[13px]">
             {filteredProducts.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-neutral-400">
+                <td colSpan={5} className="py-12 text-center text-neutral-400">
                   <span className="font-serif text-xl block uppercase tracking-widest mb-1">
                     No Creations Found
                   </span>
@@ -114,12 +113,12 @@ export default function ProductTable({
                     </div>
                   </td>
 
-                  {/* Title, Sizes & Description */}
+                  {/* Title & Sizes */}
                   <td className="py-3 px-6 max-w-xs">
                     <span className="font-medium text-neutral-900 tracking-wide block uppercase text-[12px]">
                       {p.title}
                     </span>
-                    <div className="flex flex-wrap gap-1 mt-1">
+                    <div className="flex flex-wrap gap-1 mt-1.5">
                       {(["XS", "S", "M", "L", "XL"] as const).map((size) => {
                         const isAvailable = (p.available_sizes || ["XS", "S", "M", "L", "XL"]).includes(size);
                         return (
@@ -136,9 +135,6 @@ export default function ProductTable({
                         );
                       })}
                     </div>
-                    <p className="text-neutral-500 text-[11px] line-clamp-2 mt-1 font-light leading-relaxed">
-                      {p.description}
-                    </p>
                   </td>
 
                   {/* Category */}
@@ -157,11 +153,6 @@ export default function ProductTable({
                   {/* Price */}
                   <td className="py-3 px-6 font-sans font-medium text-neutral-900 tracking-wider">
                     ${p.price.toLocaleString()}
-                  </td>
-
-                  {/* Details */}
-                  <td className="py-3 px-6 text-neutral-500 text-[11px] font-light max-w-xs truncate">
-                    {p.details || "—"}
                   </td>
 
                   {/* Actions */}

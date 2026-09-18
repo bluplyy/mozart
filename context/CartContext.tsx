@@ -6,8 +6,8 @@ import { CartItem, Product } from "@/lib/types";
 interface CartContextType {
   items: CartItem[];
   addToCart: (product: Product, selectedSize?: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeFromCart: (productId: string, selectedSize?: string) => void;
+  updateQuantity: (productId: string, quantity: number, selectedSize?: string) => void;
   clearCart: () => void;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
@@ -57,17 +57,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (productId: string) => {
-    setItems((prev) => prev.filter((i) => i.product.id !== productId));
+  const removeFromCart = (productId: string, selectedSize?: string) => {
+    setItems((prev) =>
+      prev.filter((i) => {
+        if (selectedSize !== undefined) {
+          return !(i.product.id === productId && i.selectedSize === selectedSize);
+        }
+        return i.product.id !== productId;
+      })
+    );
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, selectedSize?: string) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, selectedSize);
       return;
     }
     setItems((prev) =>
-      prev.map((i) => (i.product.id === productId ? { ...i, quantity } : i))
+      prev.map((i) => {
+        const matches =
+          selectedSize !== undefined
+            ? i.product.id === productId && i.selectedSize === selectedSize
+            : i.product.id === productId;
+        return matches ? { ...i, quantity } : i;
+      })
     );
   };
 

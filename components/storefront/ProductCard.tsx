@@ -76,12 +76,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             {formattedPrice}
           </span>
         </div>
-
-        {product.details && (
-          <p className="text-[11px] text-neutral-400 mt-1 line-clamp-1 font-light tracking-wide">
-            {product.details}
-          </p>
-        )}
       </div>
     </div>
   );

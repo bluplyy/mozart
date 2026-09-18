@@ -128,7 +128,7 @@ export default function CartDrawer() {
                         {item.product.title}
                       </h4>
                       <button
-                        onClick={() => removeFromCart(item.product.id)}
+                        onClick={() => removeFromCart(item.product.id, item.selectedSize)}
                         className="text-neutral-400 hover:text-red-600 transition-colors ml-2"
                       >
                         <Trash2 size={13} />
@@ -144,7 +144,7 @@ export default function CartDrawer() {
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center border border-neutral-300">
                       <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.selectedSize)}
                         className="px-2 py-1 text-neutral-600 hover:text-black hover:bg-neutral-100"
                       >
                         <Minus size={10} />
@@ -153,7 +153,7 @@ export default function CartDrawer() {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.selectedSize)}
                         className="px-2 py-1 text-neutral-600 hover:text-black hover:bg-neutral-100"
                       >
                         <Plus size={10} />

@@ -150,20 +150,6 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Editorial Description */}
-          <div className="border-t border-b border-black/[0.08] py-6">
-            <p className="text-[13px] text-neutral-700 leading-relaxed font-light tracking-wide">
-              {product.description}
-            </p>
-
-            {product.details && (
-              <div className="mt-4 pt-4 border-t border-black/[0.05] flex items-center space-x-2 text-[11px] uppercase tracking-wider text-neutral-500 font-medium">
-                <Sparkles size={13} className="text-neutral-700 shrink-0" />
-                <span>{product.details}</span>
-              </div>
-            )}
-          </div>
-
           {/* Size Selector */}
           <div>
             <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
