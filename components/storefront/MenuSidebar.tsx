@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { X, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, X } from "lucide-react";
 
 interface SubItem {
   name: string;
@@ -13,7 +13,6 @@ interface MenuSidebarProps {
   isOpen: boolean;
   activeCategory: "women" | "men";
   onClose: () => void;
-  onSwitchCategory: (cat: "women" | "men") => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
@@ -38,17 +37,17 @@ export default function MenuSidebar({
   isOpen,
   activeCategory,
   onClose,
-  onSwitchCategory,
   onMouseEnter,
   onMouseLeave,
 }: MenuSidebarProps) {
-  // Escape key closes sidebar
+  // Close on Escape key press
   useEffect(() => {
-    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    window.addEventListener("keydown", handleKeyDown);
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
@@ -58,98 +57,72 @@ export default function MenuSidebar({
     <>
       {/*
         ─────────────────────────────────────────────────────────────
-        BACKDROP — independent opacity transition, ~350ms.
-        Sits below the sidebar drawer (z-40 vs z-50).
+        BACKDROP OVERLAY
+        Independent opacity animation: ~350ms cubic-bezier(0.22, 1, 0.36, 1)
+        Sits above the page content, below the drawer and navbar (z-40).
         ─────────────────────────────────────────────────────────────
       */}
       <div
         onClick={onClose}
-        aria-hidden="true"
         style={{
           transition: "opacity 350ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
         className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
+        aria-hidden="true"
       />
 
       {/*
         ─────────────────────────────────────────────────────────────
-        SIDEBAR DRAWER
-        position: fixed — completely independent of navbar layout.
-        Animates ONLY via transform: translate3d(-100%,0,0) → (0,0,0).
-        No width changes. No opacity fade. No navbar involvement.
+        SIDEBAR DRAWER LAYER
+        Independent fixed-position layer above the page:
+        position: fixed; top: 0; left: 0; height: 100dvh; z-index: 45;
+        Animates ONLY via transform: translate3d(-100%, 0, 0) → (0, 0, 0)
+        with GPU compositing and cubic-bezier(0.22, 1, 0.36, 1).
         ─────────────────────────────────────────────────────────────
       */}
       <aside
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation Menu"
         style={{
           transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
           willChange: "transform",
         }}
-        className={`
-          fixed top-0 left-0 h-dvh z-50
-          w-full sm:w-[420px] md:w-[460px]
-          bg-[#fafaf8] text-[#09090b]
-          shadow-2xl border-r border-black/[0.08]
-          flex flex-col justify-between
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
+        className={`fixed top-0 left-0 h-[100dvh] z-45 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        role="dialog"
+        aria-label="Navigation Menu"
       >
-        {/* ── Top bar: Category tabs + Close ─────────────────────── */}
-        <div className="px-8 pt-8 pb-6 flex items-center justify-between border-b border-black/[0.06]">
-          {/* Category switcher tabs */}
-          <div className="flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium">
-            <button
-              type="button"
-              onClick={() => onSwitchCategory("women")}
-              className={`relative py-1 transition-colors ${
-                activeCategory === "women"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
-              }`}
-            >
-              Women
-            </button>
-            <button
-              type="button"
-              onClick={() => onSwitchCategory("men")}
-              className={`relative py-1 transition-colors ${
-                activeCategory === "men"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
-              }`}
-            >
-              Men
-            </button>
-          </div>
-
-          {/* Close button */}
+        {/* Top spacer & category indicator header - sits cleanly below the sticky navbar */}
+        <div className="pt-28 px-8 pb-4 flex items-center justify-between border-b border-black/[0.05]">
+          <span className="text-[11px] tracking-[0.25em] uppercase font-semibold text-neutral-400">
+            {activeCategory === "women" ? "Women's Collection" : "Men's Collection"}
+          </span>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close menu"
             className="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-200/60"
           >
-            <X size={20} strokeWidth={1.5} />
+            <X size={18} strokeWidth={1.5} />
           </button>
         </div>
 
-        {/* ── Navigation links body ───────────────────────────────── */}
-        <div className="flex-1 px-8 py-12 flex flex-col justify-center overflow-y-auto">
+        {/* Main Links Body */}
+        <div className="flex-1 px-8 py-8 flex flex-col justify-center overflow-y-auto">
           <nav className="space-y-6">
             {links.map((item, idx) => (
               <div
                 key={item.name}
                 style={{
-                  transitionDelay: isOpen ? `${idx * 45 + 80}ms` : "0ms",
+                  transitionDelay: isOpen ? `${idx * 40 + 60}ms` : "0ms",
                 }}
                 className={`transform transition-all duration-500 ease-out ${
-                  isOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+                  isOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-4"
                 }`}
               >
                 <Link
@@ -171,7 +144,7 @@ export default function MenuSidebar({
           </nav>
         </div>
 
-        {/* ── Footer ─────────────────────────────────────────────── */}
+        {/* Bottom Drawer Footer: Editorial Studio Note */}
         <div className="px-8 py-8 border-t border-black/[0.06] bg-[#f4f3ee]/60">
           <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-500 font-semibold mb-2">
             <Sparkles size={12} className="text-neutral-700" />

@@ -15,89 +15,95 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Sidebar state — only controls the sidebar, never the navbar
+  // Sidebar visibility and active category
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCategory, setSidebarCategory] = useState<"women" | "men">("women");
 
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup on unmount
+  // Clear pending timers on unmount
   useEffect(() => {
     return () => {
-      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     };
   }, []);
 
-  const cancelClose = () => {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
+  // Hover handlers for navbar menu items
+  const handleMouseEnterNav = (cat: "women" | "men") => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
-  };
-
-  const scheduleClose = (delayMs: number) => {
-    cancelClose();
-    closeTimerRef.current = setTimeout(() => {
-      setSidebarOpen(false);
-    }, delayMs);
-  };
-
-  const openSidebar = (cat: "women" | "men") => {
-    cancelClose();
     setSidebarCategory(cat);
     setSidebarOpen(true);
   };
 
-  const closeSidebar = () => {
-    cancelClose();
-    setSidebarOpen(false);
+  const handleMouseLeaveNav = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setSidebarOpen(false);
+    }, 220);
   };
 
-  // Navbar hover handlers — navbar NEVER moves or animates
-  const handleNavMouseEnter = (cat: "women" | "men") => {
-    cancelClose();
-    openSidebar(cat);
-  };
-
-  const handleNavMouseLeave = () => {
-    scheduleClose(250);
-  };
-
+  // Hover handlers for the sidebar drawer to keep it open while browsing
   const handleSidebarMouseEnter = () => {
-    cancelClose();
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
   };
 
   const handleSidebarMouseLeave = () => {
-    scheduleClose(200);
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setSidebarOpen(false);
+    }, 180);
   };
 
-  const isActive = (path: string) => pathname === path;
+  const handleClickNav = (cat: "women" | "men") => {
+    setSidebarCategory(cat);
+    setSidebarOpen(true);
+  };
+
+  // Determine active underline indicator:
+  // While sidebar is open, highlight the active category in the sidebar.
+  // While closed, highlight the current route.
+  const isCategoryActive = (cat: "women" | "men") => {
+    if (sidebarOpen) {
+      return sidebarCategory === cat;
+    }
+    return (
+      (cat === "women" && pathname === "/women") ||
+      (cat === "men" && pathname === "/men")
+    );
+  };
 
   return (
     <>
       {/*
         ─────────────────────────────────────────────────────────────
-        NAVBAR — COMPLETELY STATIC. NO TRANSFORMS. NO ANIMATIONS.
-        This element must never be involved in any sidebar transition.
+        PERMANENT, STATIC NAVBAR HEADER
+        z-index: 50 — sits above the sidebar drawer layer (z-45).
+        Dimensions, layout, font sizes, and positions NEVER move or resize.
         ─────────────────────────────────────────────────────────────
       */}
-      <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
+      <header className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
-        <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium">
-          Complimentary Worldwide Courier &amp; Signature Studio Wrapping
+        <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium select-none">
+          Complimentary Worldwide Courier & Signature Studio Wrapping
         </div>
 
-        {/* Main navigation row — static layout, never animated */}
+        {/* Main navigation row */}
         <div className="max-w-[1720px] mx-auto px-8 h-20 flex items-center justify-between">
-
-          {/* Left: Collections Navigation — these items NEVER move */}
+          {/* Left: Collections Navigation - Permanent, static DOM elements */}
           <nav className="flex items-center space-x-7 md:space-x-9 text-[12px] uppercase tracking-[0.2em] font-medium">
             <Link
               href="/women"
-              onMouseEnter={() => handleNavMouseEnter("women")}
-              onMouseLeave={handleNavMouseLeave}
+              onMouseEnter={() => handleMouseEnterNav("women")}
+              onMouseLeave={handleMouseLeaveNav}
+              onClick={() => handleClickNav("women")}
               className={`relative py-1 hover:text-black transition-colors ${
-                isActive("/women")
+                isCategoryActive("women")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
                   : "text-neutral-500"
               }`}
@@ -107,10 +113,11 @@ export default function Navbar() {
 
             <Link
               href="/men"
-              onMouseEnter={() => handleNavMouseEnter("men")}
-              onMouseLeave={handleNavMouseLeave}
+              onMouseEnter={() => handleMouseEnterNav("men")}
+              onMouseLeave={handleMouseLeaveNav}
+              onClick={() => handleClickNav("men")}
               className={`relative py-1 hover:text-black transition-colors ${
-                isActive("/men")
+                isCategoryActive("men")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
                   : "text-neutral-500"
               }`}
@@ -119,16 +126,20 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          {/* Center: Brand Wordmark — static */}
+          {/* Center: Brand Wordmark */}
           <div className="absolute left-1/2 -translate-x-1/2 text-center">
-            <Link href="/" className="group flex flex-col items-center justify-center cursor-pointer">
+            <Link
+              href="/"
+              onClick={() => setSidebarOpen(false)}
+              className="group flex flex-col items-center justify-center cursor-pointer"
+            >
               <span className="font-serif text-3xl md:text-4xl tracking-[0.35em] text-[#09090b] uppercase font-normal select-none">
                 MOZART
               </span>
             </Link>
           </div>
 
-          {/* Right: Actions — static */}
+          {/* Right: Actions (Search, Bag, Admin Studio) */}
           <div className="flex items-center space-x-7">
             <div className="relative flex items-center">
               {searchOpen ? (
@@ -160,7 +171,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Account */}
+            {/* Client Account / Sign In */}
             <Link
               href={isAuthenticated ? "/account" : "/login"}
               className="flex items-center space-x-1.5 text-[11px] tracking-[0.18em] uppercase text-neutral-800 hover:text-black transition-colors"
@@ -171,7 +182,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {/* Bag */}
+            {/* Bag Flyout trigger */}
             <button
               onClick={() => setIsCartOpen(true)}
               className="flex items-center space-x-2 text-[11px] tracking-[0.18em] uppercase text-neutral-800 hover:text-black group"
@@ -192,15 +203,15 @@ export default function Navbar() {
 
       {/*
         ─────────────────────────────────────────────────────────────
-        SIDEBAR — fully independent fixed-position overlay layer.
-        Rendered outside <header>, never affects navbar layout.
+        INDEPENDENT FIXED-POSITION SIDEBAR DRAWER LAYER
+        Slides in smoothly from the left (GPU transform: translate3d)
+        with independent overlay dimming.
         ─────────────────────────────────────────────────────────────
       */}
       <MenuSidebar
         isOpen={sidebarOpen}
         activeCategory={sidebarCategory}
-        onClose={closeSidebar}
-        onSwitchCategory={(cat) => setSidebarCategory(cat)}
+        onClose={() => setSidebarOpen(false)}
         onMouseEnter={handleSidebarMouseEnter}
         onMouseLeave={handleSidebarMouseLeave}
       />
