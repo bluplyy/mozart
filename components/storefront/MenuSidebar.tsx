@@ -11,15 +11,12 @@ interface SubItem {
 
 interface MenuSidebarProps {
   isOpen: boolean;
-  activeCategory: "women" | "men" | null;
+  activeCategory: "women" | "men";
   onClose: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-  onSwitchCategory: (cat: "women" | "men") => void;
   asideRef?: React.RefObject<HTMLElement | null>;
-  womenRef?: React.RefObject<HTMLButtonElement | null>;
-  menRef?: React.RefObject<HTMLButtonElement | null>;
-  hideMenuItems?: boolean;
+  landingSlotRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const WOMEN_LINKS: SubItem[] = [
@@ -44,11 +41,8 @@ export default function MenuSidebar({
   onClose,
   onMouseEnter,
   onMouseLeave,
-  onSwitchCategory,
   asideRef,
-  womenRef,
-  menRef,
-  hideMenuItems = false,
+  landingSlotRef,
 }: MenuSidebarProps) {
   // Close on Escape key press
   useEffect(() => {
@@ -69,7 +63,7 @@ export default function MenuSidebar({
       {/* Dimmed backdrop with smooth luxury fade */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -80,50 +74,30 @@ export default function MenuSidebar({
         ref={asideRef}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className={`fixed top-0 left-0 bottom-0 z-50 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between transform transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed top-0 left-0 bottom-0 z-50 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
         aria-label="Navigation Menu"
       >
-        {/* Top bar: Brand & Close */}
+        {/* Top bar: Landing target slot for the Navbar menu & Close button */}
         <div className="px-8 pt-8 pb-6 flex items-center justify-between border-b border-black/[0.06]">
+          {/* Target landing slot where the real navbar <nav> docks */}
           <div
-            className={`flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium ${
-              hideMenuItems ? "opacity-0 pointer-events-none transition-none" : "opacity-100"
-            }`}
+            ref={landingSlotRef}
+            className="flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium opacity-0 pointer-events-none select-none"
+            aria-hidden="true"
           >
-            <button
-              ref={womenRef}
-              type="button"
-              onClick={() => onSwitchCategory("women")}
-              className={`py-1 transition-colors relative ${
-                category === "women"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-500 hover:text-black"
-              }`}
-            >
-              Women
-            </button>
-            <button
-              ref={menRef}
-              type="button"
-              onClick={() => onSwitchCategory("men")}
-              className={`py-1 transition-colors relative ${
-                category === "men"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-500 hover:text-black"
-              }`}
-            >
-              Men
-            </button>
+            <span className="py-1">Women</span>
+            <span className="py-1">Men</span>
           </div>
 
+          {/* Close button */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close menu"
-            className="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-200/60"
+            className="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-200/60 pointer-events-auto"
           >
             <X size={20} strokeWidth={1.5} />
           </button>
