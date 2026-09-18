@@ -174,9 +174,6 @@ export default function CustomerSignUpPage() {
               <h1 className="font-serif text-4xl tracking-[0.15em] uppercase text-neutral-900 font-normal">
                 Create Client Profile
               </h1>
-              <p className="text-[12px] text-neutral-500 font-light tracking-wide mt-2">
-                Enter your details to receive a Studio verification code.
-              </p>
             </div>
 
             {error && (

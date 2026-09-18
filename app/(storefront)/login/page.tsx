@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Eye, EyeOff, Lock, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Mail } from "lucide-react";
 
 export default function CustomerLoginPage() {
   const { signIn, isAuthenticated, user } = useAuth();
@@ -38,46 +38,13 @@ export default function CustomerLoginPage() {
     }
   };
 
-  const handleDemoFill = () => {
-    setEmail("client@mozart.com");
-    setPassword("password123");
-  };
-
   return (
-    <div className="min-h-[85vh] grid grid-cols-12 max-w-[1720px] mx-auto px-8 py-12 gap-12 items-center">
-      {/* Left Column: High-Fashion Editorial Imagery (5 cols) */}
-      <div className="col-span-5 relative h-[720px] bg-black overflow-hidden shadow-2xl">
-        <img
-          src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop"
-          alt="Mozart Studio"
-          className="w-full h-full object-cover opacity-80"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-        <div className="absolute bottom-12 left-10 right-10 text-white">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 block mb-2">
-            Client Privilege
-          </span>
-          <h3 className="font-serif text-3xl tracking-[0.1em] uppercase font-normal mb-3">
-            Private Studio Access
-          </h3>
-          <p className="text-[12px] text-neutral-300 font-light leading-relaxed tracking-wide">
-            Sign in to access your bespoke orders, preview private runway collections, and communicate with your dedicated Paris concierge.
-          </p>
-        </div>
-      </div>
-
-      {/* Right Column: Editorial Login Form (7 cols) */}
-      <div className="col-span-7 max-w-lg mx-auto w-full py-8">
+    <div className="min-h-[85vh] flex items-center justify-center max-w-[1720px] mx-auto px-8 py-16">
+      <div className="max-w-md mx-auto w-full py-8">
         <div className="mb-10 text-center">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 font-semibold block mb-2">
-            Client Authentication
-          </span>
           <h1 className="font-serif text-4xl tracking-[0.15em] uppercase text-neutral-900 font-normal">
-            Client Sign In
+            SIGN IN
           </h1>
-          <p className="text-[12px] text-neutral-500 font-light tracking-wide mt-2">
-            Enter your email and credentials to enter the Mozart Studio.
-          </p>
         </div>
 
         {error && (
@@ -144,18 +111,6 @@ export default function CustomerLoginPage() {
             <ArrowRight size={14} />
           </button>
         </form>
-
-        {/* Demo Quick Fill Helper */}
-        <div className="mt-8 pt-6 border-t border-black/[0.06] text-center">
-          <button
-            type="button"
-            onClick={handleDemoFill}
-            className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 hover:text-black border border-neutral-300 hover:border-black py-2 px-4 inline-flex items-center gap-1.5 transition-colors"
-          >
-            <Sparkles size={12} />
-            <span>Use Demo Client Account (`client@mozart.com`)</span>
-          </button>
-        </div>
 
         {/* Link to Sign Up */}
         <div className="mt-8 text-center text-[12px] tracking-wide text-neutral-500">
