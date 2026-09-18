@@ -285,21 +285,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!cleanEmail || !cleanEmail.includes("@")) return { success: false, error: "A valid email address is required." };
     if (cleanPassword.length < 6) return { success: false, error: "Password must contain at least 6 characters." };
 
-    // Check if email already registered
-    let usersDb = DEFAULT_USERS;
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(LOCAL_USERS_KEY);
-      if (stored) {
-        try {
-          usersDb = { ...DEFAULT_USERS, ...JSON.parse(stored) };
-        } catch {
-          // ignore
-        }
-      }
-    }
-
-    if (usersDb[cleanEmail]) {
-      return { success: false, error: "An account with this email address already exists. Please sign in." };
+    // Check if email belongs to reserved system demo accounts
+    if (DEFAULT_USERS[cleanEmail]) {
+      return { success: false, error: "This is a reserved studio demonstration account. Please sign in." };
     }
 
     // Generate secure token and confirmation URL
@@ -310,6 +298,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const origin = typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
     const confirmationUrl = `${origin}/confirm?token=${encodeURIComponent(generatedToken)}&email=${encodeURIComponent(cleanEmail)}`;
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Clean up any stale local storage cache for this email
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(LOCAL_USERS_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed[cleanEmail]) {
+            delete parsed[cleanEmail];
+            localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(parsed));
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // Try Supabase signUp first as the authority
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      try {
+        const { error } = await supabase.auth.signUp({
+          email: cleanEmail,
+          password: cleanPassword,
+          options: {
+            data: { name: cleanName, role: portal },
+            emailRedirectTo: `${origin}/confirm`,
+          },
+        });
+        if (error) {
+          return { success: false, error: error.message };
+        }
+      } catch (err: any) {
+        console.warn("Supabase signUp network error:", err);
+      }
+    }
 
     const pending: PendingSignUp = {
       name: cleanName,
@@ -325,23 +349,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setPendingSignUp(pending);
     if (typeof window !== "undefined") {
       localStorage.setItem(LOCAL_PENDING_KEY, JSON.stringify(pending));
-    }
-
-    // Try Supabase signUp in background
-    const supabase = getSupabaseClient();
-    if (supabase) {
-      try {
-        await supabase.auth.signUp({
-          email: cleanEmail,
-          password: cleanPassword,
-          options: {
-            data: { name: cleanName, role: portal },
-            emailRedirectTo: `${origin}/confirm`,
-          },
-        });
-      } catch {
-        // Handled via local fallback
-      }
     }
 
     // Dispatch email via API (real Gmail SMTP and Webmail Store)
