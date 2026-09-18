@@ -108,7 +108,7 @@ export default function HomePage() {
               Curated Selection
             </span>
             <h2 className="font-serif text-3xl tracking-[0.15em] uppercase font-normal text-[#09090b]">
-              Studio Highlights
+              Highlights
             </h2>
           </div>
           <div className="flex items-center space-x-8 text-[11px] uppercase tracking-[0.2em]">

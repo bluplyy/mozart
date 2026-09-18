@@ -7,6 +7,7 @@
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --background: #fafaf8;
   --foreground: #09090b;
+  --header-height: 111px;
 }
 
 body {
@@ -59,4 +60,23 @@ body {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-duration: 250ms;
+}
+
+/* Luxury subtle panel scrollbar for independent scrolling */
+.luxury-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.luxury-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.luxury-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.luxury-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+.luxury-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
 }

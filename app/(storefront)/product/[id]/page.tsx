@@ -12,6 +12,7 @@ import {
   Truck,
   Plus,
   Minus,
+  Heart,
 } from "lucide-react";
 
 export default function ProductDetailPage() {
@@ -22,6 +23,8 @@ export default function ProductDetailPage() {
   const { addToCart } = useCart();
 
   const [selectedSize, setSelectedSize] = useState("M");
+  const [selectedColor, setSelectedColor] = useState("Noir Obsidian");
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [added, setAdded] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -64,12 +67,6 @@ export default function ProductDetailPage() {
     );
   }
 
-  const handleAdd = () => {
-    addToCart(product, currentSize);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
-
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -80,24 +77,71 @@ export default function ProductDetailPage() {
   const availableSizesList = product.available_sizes || ["L", "XL", "M", "S", "XS"];
 
   // Initialize selectedSize to first available size if current is not available
-  const currentSize = availableSizesList.includes(selectedSize) 
-    ? selectedSize 
+  const currentSize = availableSizesList.includes(selectedSize)
+    ? selectedSize
     : (availableSizesList[0] || "M");
 
+  const handleAdd = () => {
+    addToCart(product, currentSize);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  // Curated color variants
+  const COLOR_VARIANTS = [
+    { name: "Noir Obsidian", hex: "#171717" },
+    { name: "Ivoire Crème", hex: "#ebe6dc" },
+    { name: "Fauve Camel", hex: "#8c5b36" },
+  ];
+
+  // Prepare gallery images (ensuring multiple stacked editorial looks)
+  const galleryImages = (() => {
+    if (product.images && product.images.length >= 3) {
+      return product.images;
+    }
+    const base = [
+      product.image_url,
+      ...(product.secondary_image_url ? [product.secondary_image_url] : []),
+    ].filter(Boolean) as string[];
+
+    if (base.length === 1) {
+      return [
+        base[0],
+        `${base[0]}&auto=format&fit=crop&crop=faces,top`,
+        `${base[0]}&auto=format&fit=crop&crop=center`,
+        `${base[0]}&auto=format&fit=crop&crop=edges`,
+      ];
+    }
+    if (base.length === 2) {
+      return [
+        base[0],
+        base[1],
+        `${base[0]}&auto=format&fit=crop&crop=center`,
+        `${base[1]}&auto=format&fit=crop&crop=edges`,
+      ];
+    }
+    return base;
+  })();
+
   return (
-    <div className="max-w-[1720px] mx-auto px-8 py-12">
+    <div className="max-w-[1720px] mx-auto px-6 sm:px-8 lg:px-12 py-6 lg:py-8">
       {/* Breadcrumb row */}
-      <div className="flex items-center justify-between border-b border-black/[0.08] pb-6 mb-12">
+      <div className="flex items-center justify-between border-b border-black/[0.08] pb-4 mb-8">
         <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-400">
           <Link href="/" className="hover:text-black">
             Home
           </Link>
           <span>/</span>
-          <Link href={product.category === "Men" ? "/men" : "/women"} className="hover:text-black">
+          <Link
+            href={product.category === "Men" ? "/men" : "/women"}
+            className="hover:text-black"
+          >
             {product.category}
           </Link>
           <span>/</span>
-          <span className="text-black font-semibold truncate max-w-xs">{product.title}</span>
+          <span className="text-black font-semibold truncate max-w-xs">
+            {product.title}
+          </span>
         </div>
 
         <button
@@ -109,41 +153,78 @@ export default function ProductDetailPage() {
         </button>
       </div>
 
-      {/* Asymmetrical 2-Column Luxury Layout */}
-      <div className="grid grid-cols-12 gap-16 items-start">
-        {/* Left Column: High-Res Editorial Gallery (7 cols) */}
-        <div className="col-span-7 space-y-8">
-          {(() => {
-            const galleryImages =
-              product.images && product.images.length > 0
-                ? product.images
-                : [product.image_url, ...(product.secondary_image_url ? [product.secondary_image_url] : [])].filter(Boolean);
+      {/* Split-Screen Product Layout: Two Independent Content Columns */}
+      <main className="product-layout flex flex-col lg:flex-row gap-10 xl:gap-16 items-start">
+        {/*
+          LEFT COLUMN: Product Media / Gallery
+          - Multiple product images stacked vertically
+          - Natural content height
+          - Responsive width, stable aspect ratio (3:4)
+        */}
+        <section
+          aria-label="Product Gallery"
+          className="product-media w-full lg:w-[58%] xl:w-[60%] space-y-6 md:space-y-8"
+        >
+          {galleryImages.map((imgSrc, index) => (
+            <div
+              key={index}
+              className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm relative group"
+            >
+              <img
+                src={imgSrc}
+                alt={`${product.title} editorial look ${index + 1}`}
+                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+              <span className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[9px] tracking-[0.2em] uppercase px-2.5 py-1 font-mono select-none">
+                LOOK 0{index + 1}
+              </span>
+            </div>
+          ))}
+        </section>
 
-            return galleryImages.map((imgSrc, index) => (
-              <div key={index} className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm relative group">
-                <img
-                  src={imgSrc}
-                  alt={`${product.title} view ${index + 1}`}
-                  className="w-full h-full object-cover object-center"
-                />
-                <span className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[9px] tracking-[0.2em] uppercase px-2.5 py-1 font-mono">
-                  LOOK 0{index + 1}
+        {/*
+          RIGHT COLUMN: Product Information Panel
+          - Sticky desktop positioning relative to dynamic --header-height
+          - Independent vertical scroll with overscroll-behavior: contain
+          - Single source of truth for all details, CTA, and accordions
+          - Falls back gracefully to normal flowing column on mobile
+        */}
+        <aside
+          aria-label="Product Information"
+          className="product-information w-full lg:w-[42%] xl:w-[40%] lg:sticky lg:top-[var(--header-height,111px)] lg:h-[calc(100dvh-var(--header-height,111px))] lg:overflow-y-auto lg:overscroll-contain luxury-scrollbar space-y-8 lg:py-2 lg:pr-3"
+        >
+          {/* Header & Title with Wishlist Icon */}
+          <div>
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div className="flex items-center space-x-3">
+                <span className="bg-black text-white text-[9px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1">
+                  {product.category}&apos;s High Fashion
+                </span>
+                <span className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 font-mono">
+                  REF: {product.id.slice(0, 10).toUpperCase()}
                 </span>
               </div>
-            ));
-          })()}
-        </div>
 
-        {/* Right Column: Sticky Purchasing Details (5 cols) */}
-        <div className="col-span-5 sticky top-28 space-y-8 pl-4">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <span className="bg-black text-white text-[9px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1">
-                {product.category}'s High Fashion
-              </span>
-              <span className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 font-mono">
-                REF: {product.id.slice(0, 10).toUpperCase()}
-              </span>
+              {/* Wishlist Button */}
+              <button
+                type="button"
+                onClick={() => setIsWishlisted(!isWishlisted)}
+                aria-label={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+                title={isWishlisted ? "In your Wishlist" : "Add to Wishlist"}
+                className={`p-2.5 rounded-full border transition-all shrink-0 ${
+                  isWishlisted
+                    ? "bg-black text-white border-black"
+                    : "border-black/15 hover:border-black text-neutral-500 hover:text-black bg-transparent"
+                }`}
+              >
+                <Heart
+                  size={15}
+                  className={`transition-transform duration-200 ${
+                    isWishlisted ? "fill-white scale-110" : ""
+                  }`}
+                />
+              </button>
             </div>
 
             <h1 className="font-serif text-3xl md:text-4xl tracking-[0.08em] uppercase font-normal text-neutral-900 mt-3 leading-tight">
@@ -155,11 +236,41 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
+          {/* Color / Variant Selector */}
+          <div>
+            <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
+              <span className="font-semibold text-neutral-800">
+                Color: <span className="font-normal text-neutral-500">{selectedColor}</span>
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              {COLOR_VARIANTS.map((c) => (
+                <button
+                  key={c.name}
+                  type="button"
+                  onClick={() => setSelectedColor(c.name)}
+                  aria-label={`Select color ${c.name}`}
+                  className={`group relative flex items-center justify-center w-8 h-8 rounded-full border transition-all ${
+                    selectedColor === c.name
+                      ? "ring-2 ring-black ring-offset-2 ring-offset-[#fafaf8] border-black"
+                      : "border-black/20 hover:border-black"
+                  }`}
+                >
+                  <span
+                    className="w-6 h-6 rounded-full border border-black/10"
+                    style={{ backgroundColor: c.hex }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Size Selector */}
           <div>
             <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
               <span className="font-semibold text-neutral-800">Select Size</span>
-              <span className="text-neutral-400 text-[10px] underline cursor-pointer">
+              <span className="text-neutral-400 text-[10px] underline cursor-pointer hover:text-black">
                 Size Guide
               </span>
             </div>
@@ -195,7 +306,7 @@ export default function ProductDetailPage() {
             </div>
             {availableSizesList.length === 0 && (
               <p className="text-[11px] text-amber-800 mt-2 font-light">
-                Saat ini semua ukuran untuk piece ini sedang habis.
+                All sizes for this bespoke creation are currently reserved.
               </p>
             )}
           </div>
@@ -224,21 +335,21 @@ export default function ProductDetailPage() {
           {/* Digital Advisor Assistance Callout */}
           <div className="pt-2 text-[13px] text-neutral-600 font-light leading-relaxed">
             <p>
-              Hubungi Digital Advisor kami yang tersedia jika ada pertanyaan mengenai produk ini.{" "}
+              Contact our Digital Concierge for tailored styling guidance, private salon reservations, or size inquiries.{" "}
               <a
                 href={`https://wa.me/6281234567890?text=${encodeURIComponent(
-                  `Halo Digital Advisor MOZART, saya memiliki pertanyaan mengenai piece ${product.title} (REF: ${product.id.slice(0, 10).toUpperCase()}).`
+                  `Hello MOZART Concierge, I have an inquiry regarding ${product.title} (REF: ${product.id.slice(0, 10).toUpperCase()}).`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-neutral-900 underline underline-offset-4 hover:opacity-75 transition-opacity"
               >
-                Hubungi kami.
+                Contact Concierge.
               </a>
             </p>
           </div>
 
-          {/* Product Description with 'Baca lebih lanjut' Toggle */}
+          {/* Product Description with Toggle */}
           <div className="space-y-2 pt-1">
             <p
               className={`text-[13px] text-neutral-600 font-light leading-relaxed transition-all duration-300 ${
@@ -246,18 +357,18 @@ export default function ProductDetailPage() {
               }`}
             >
               {product.description ||
-                "Neverfull MM hadir kembali dalam Monogram Emblem khas Rumah Mode, dibuat dari bahan sensorial jacquard yang terinspirasi dari canvas orisinal tahun 1896. Tas ini menyatukan keahlian pengerjaan studio dengan siluet kontemporer yang abadi."}
+                "Rendered in exquisite haute couture craftsmanship, this silhouette captures modern structuralism and timeless Parisian poise. Each piece is individually tailored using master heritage techniques."}
             </p>
             <button
               type="button"
               onClick={() => setIsDescExpanded(!isDescExpanded)}
               className="text-[13px] text-neutral-900 font-medium underline underline-offset-4 hover:opacity-75 transition-opacity cursor-pointer block"
             >
-              {isDescExpanded ? "Tampilkan lebih sedikit" : "Baca lebih lanjut"}
+              {isDescExpanded ? "Read less" : "Read more"}
             </button>
           </div>
 
-          {/* Luxury Information Accordion (Sustainability, Product Care, Butik) */}
+          {/* Luxury Information Accordion (Sustainability, Product Care, Boutique Availability) */}
           <div className="border-t border-neutral-200 mt-6 divide-y divide-neutral-200">
             {/* Sustainability */}
             <div>
@@ -280,7 +391,7 @@ export default function ProductDetailPage() {
               {openSection === "sustainability" && (
                 <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
                   {product.sustainability ||
-                    "MOZART berkomitmen terhadap keberlanjutan dan pelestarian lingkungan hidup. Setiap helai bahan diproduksi secara bertanggung jawab dengan sertifikasi standar lingkungan internasional, meminimalisir jejak karbon, serta menggunakan kemasan 100% dapat didaur ulang yang berasal dari hutan terkelola lestari."}
+                    "MOZART is committed to environmental stewardship and artisanal preservation. Every material is sustainably sourced and certified by international ecology benchmarks, minimizing carbon footprint and packaged in 100% recyclable materials from sustainably managed forests."}
                 </div>
               )}
             </div>
@@ -306,12 +417,12 @@ export default function ProductDetailPage() {
               {openSection === "product_care" && (
                 <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
                   {product.product_care ||
-                    "Untuk menjaga keindahan dan daya tahan busana eksklusif ini:\n• Simpan dalam dust bag katun berpori di ruangan dengan suhu sejuk dan stabil.\n• Hindari paparan langsung air, cairan kimiawi, parfum, dan sinar matahari berlebih.\n• Disarankan perawatan melalui dry cleaning profesional bersertifikasi."}
+                    "To maintain the pristine silhouette and material longevity:\n• Store in breathable cotton garment bag in a temperate, dry environment.\n• Avoid direct contact with moisture, cosmetic sprays, and intense prolonged UV exposure.\n• Professional specialized eco-dry cleaning recommended."}
                 </div>
               )}
             </div>
 
-            {/* Lihat ketersediaan di butik */}
+            {/* Boutique Availability */}
             <div>
               <button
                 type="button"
@@ -319,7 +430,7 @@ export default function ProductDetailPage() {
                 className="w-full py-4 flex items-center justify-between text-left group transition-colors"
               >
                 <span className="text-[14px] text-neutral-900 font-normal tracking-wide group-hover:opacity-75">
-                  Lihat ketersediaan di butik
+                  Boutique Availability
                 </span>
                 <span className="text-neutral-700 shrink-0 ml-4">
                   {openSection === "boutique_availability" ? (
@@ -332,7 +443,7 @@ export default function ProductDetailPage() {
               {openSection === "boutique_availability" && (
                 <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
                   {product.boutique_availability ||
-                    "Koleksi ini tersedia untuk reservasi privat di butik resmi MOZART:\n• Jakarta: Plaza Indonesia, Level 1 (Studio Boutique)\n• Paris: 12 Vendome Square (Private Showroom)\n• Milan: Via Montenapoleone\nSilakan hubungi Digital Advisor kami untuk menjadwalkan janji temu atau memastikan ketersediaan ukuran."}
+                    "This bespoke piece is available for private appointments at MOZART Flagship Salons:\n• Paris: 12 Place Vendôme (Private Atelier)\n• Milan: Via Montenapoleone 8\n• Tokyo: Ginza 6 Studio\n• New York: Madison Avenue Flagship\nContact our Digital Concierge to reserve a private salon viewing or verify immediate regional sizing."}
                 </div>
               )}
             </div>
@@ -342,15 +453,15 @@ export default function ProductDetailPage() {
           <div className="pt-4 flex items-center justify-between text-[10px] uppercase tracking-[0.15em] text-neutral-500 font-light">
             <span className="flex items-center space-x-1.5">
               <Truck size={13} className="text-neutral-700" />
-              <span>Complimentary DHL Express</span>
+              <span>Complimentary Express Courier</span>
             </span>
             <span className="flex items-center space-x-1.5">
               <ShieldCheck size={13} className="text-neutral-700" />
-              <span>NFC Certified Piece</span>
+              <span>NFC Authenticated Piece</span>
             </span>
           </div>
-        </div>
-      </div>
+        </aside>
+      </main>
     </div>
   );
 }

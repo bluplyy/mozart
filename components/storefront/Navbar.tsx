@@ -19,7 +19,34 @@ export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCategory, setSidebarCategory] = useState<"women" | "men">("women");
 
+  const headerRef = useRef<HTMLElement | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Measure and keep --header-height CSS variable in sync across zoom levels and resizes
+  useEffect(() => {
+    const headerEl = headerRef.current;
+    if (!headerEl) return;
+
+    const updateHeight = () => {
+      const height = headerEl.getBoundingClientRect().height;
+      if (height > 0) {
+        document.documentElement.style.setProperty("--header-height", `${Math.round(height)}px`);
+      }
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(() => {
+      updateHeight();
+    });
+    observer.observe(headerEl);
+
+    window.addEventListener("resize", updateHeight);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, []);
 
   // Clear pending timers on unmount
   useEffect(() => {
@@ -80,7 +107,7 @@ export default function Navbar() {
         z-index: 50 — sits above the sidebar layer (z-40) and backdrop (z-30).
         Dimensions, layout, font sizes, and positions NEVER move or resize.
       */}
-      <header className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
+      <header ref={headerRef} className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
         <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium select-none">
           Complimentary Worldwide Courier & Signature Studio Wrapping
