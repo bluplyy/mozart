@@ -42,7 +42,7 @@ export default function Navbar() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setSidebarOpen(false);
-    }, 350);
+    }, 220);
   };
 
   // Hover handlers for the sidebar drawer to keep it open while browsing
@@ -57,15 +57,10 @@ export default function Navbar() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setSidebarOpen(false);
-    }, 250);
+    }, 180);
   };
 
-  const handleClickNav = (e: React.MouseEvent, cat: "women" | "men") => {
-    e.preventDefault();
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+  const handleClickNav = (cat: "women" | "men") => {
     setSidebarCategory(cat);
     setSidebarOpen(true);
   };
@@ -92,7 +87,7 @@ export default function Navbar() {
         Dimensions, layout, font sizes, and positions NEVER move or resize.
         ─────────────────────────────────────────────────────────────
       */}
-      <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
+      <header className="sticky top-0 z-50 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
         <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium select-none">
           Complimentary Worldwide Courier & Signature Studio Wrapping
@@ -106,7 +101,7 @@ export default function Navbar() {
               href="/women"
               onMouseEnter={() => handleMouseEnterNav("women")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={(e) => handleClickNav(e, "women")}
+              onClick={() => handleClickNav("women")}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("women")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
@@ -120,7 +115,7 @@ export default function Navbar() {
               href="/men"
               onMouseEnter={() => handleMouseEnterNav("men")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={(e) => handleClickNav(e, "men")}
+              onClick={() => handleClickNav("men")}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("men")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
@@ -219,7 +214,6 @@ export default function Navbar() {
         onClose={() => setSidebarOpen(false)}
         onMouseEnter={handleSidebarMouseEnter}
         onMouseLeave={handleSidebarMouseLeave}
-        onSwitchCategory={(cat) => setSidebarCategory(cat)}
       />
     </>
   );

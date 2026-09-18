@@ -15,7 +15,6 @@ interface MenuSidebarProps {
   onClose: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-  onSwitchCategory?: (cat: "women" | "men") => void;
 }
 
 const WOMEN_LINKS: SubItem[] = [
@@ -40,7 +39,6 @@ export default function MenuSidebar({
   onClose,
   onMouseEnter,
   onMouseLeave,
-  onSwitchCategory,
 }: MenuSidebarProps) {
   // Close on Escape key press
   useEffect(() => {
@@ -60,16 +58,16 @@ export default function MenuSidebar({
       {/*
         ─────────────────────────────────────────────────────────────
         BACKDROP OVERLAY
-        Independent opacity animation (~240ms), sits at z-30 below navbar (z-40).
-        Dims the page without blocking navbar interactions.
+        Independent opacity animation: ~350ms cubic-bezier(0.22, 1, 0.36, 1)
+        Sits above the page content, below the drawer and navbar (z-40).
         ─────────────────────────────────────────────────────────────
       */}
       <div
         onClick={onClose}
         style={{
-          transition: "opacity 240ms ease-out",
+          transition: "opacity 350ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
-        className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] ${
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -78,57 +76,37 @@ export default function MenuSidebar({
       {/*
         ─────────────────────────────────────────────────────────────
         SIDEBAR DRAWER LAYER
-        Located ABOVE the navbar: z-50 (higher than z-40 navbar and z-30 backdrop).
-        Animates swiftly from left to right in 280ms via GPU transform: translate3d.
+        Independent fixed-position layer above the page:
+        position: fixed; top: 0; left: 0; height: 100dvh; z-index: 45;
+        Animates ONLY via transform: translate3d(-100%, 0, 0) → (0, 0, 0)
+        with GPU compositing and cubic-bezier(0.22, 1, 0.36, 1).
         ─────────────────────────────────────────────────────────────
       */}
       <aside
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
-          transition: "transform 280ms cubic-bezier(0.16, 1, 0.3, 1)",
+          transition: "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
           willChange: "transform",
         }}
-        className={`fixed top-0 left-0 h-[100dvh] z-50 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
+        className={`fixed top-0 left-0 h-[100dvh] z-45 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
         aria-label="Navigation Menu"
       >
-        {/* Top bar: Category tabs + Close button located right at the top */}
-        <div className="px-8 pt-8 pb-6 flex items-center justify-between border-b border-black/[0.06]">
-          <div className="flex items-center space-x-7 md:space-x-9 text-[12px] tracking-[0.2em] uppercase font-medium">
-            <button
-              type="button"
-              onClick={() => onSwitchCategory?.("women")}
-              className={`relative py-1 transition-colors ${
-                activeCategory === "women"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
-              }`}
-            >
-              Women
-            </button>
-            <button
-              type="button"
-              onClick={() => onSwitchCategory?.("men")}
-              className={`relative py-1 transition-colors ${
-                activeCategory === "men"
-                  ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
-                  : "text-neutral-400 hover:text-black"
-              }`}
-            >
-              Men
-            </button>
-          </div>
-
+        {/* Top spacer & category indicator header - sits cleanly below the sticky navbar */}
+        <div className="pt-28 px-8 pb-4 flex items-center justify-between border-b border-black/[0.05]">
+          <span className="text-[11px] tracking-[0.25em] uppercase font-semibold text-neutral-400">
+            {activeCategory === "women" ? "Women's Collection" : "Men's Collection"}
+          </span>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close menu"
             className="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-200/60"
           >
-            <X size={20} strokeWidth={1.5} />
+            <X size={18} strokeWidth={1.5} />
           </button>
         </div>
 
@@ -139,12 +117,12 @@ export default function MenuSidebar({
               <div
                 key={item.name}
                 style={{
-                  transitionDelay: isOpen ? `${idx * 25 + 30}ms` : "0ms",
+                  transitionDelay: isOpen ? `${idx * 40 + 60}ms` : "0ms",
                 }}
-                className={`transform transition-all duration-300 ease-out ${
+                className={`transform transition-all duration-500 ease-out ${
                   isOpen
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-3"
+                    : "opacity-0 -translate-x-4"
                 }`}
               >
                 <Link
