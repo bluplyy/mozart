@@ -42,7 +42,7 @@ export default function Navbar() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setSidebarOpen(false);
-    }, 220);
+    }, 350);
   };
 
   // Hover handlers for the sidebar drawer to keep it open while browsing
@@ -57,10 +57,15 @@ export default function Navbar() {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     closeTimeoutRef.current = setTimeout(() => {
       setSidebarOpen(false);
-    }, 180);
+    }, 250);
   };
 
-  const handleClickNav = (cat: "women" | "men") => {
+  const handleClickNav = (e: React.MouseEvent, cat: "women" | "men") => {
+    e.preventDefault();
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
     setSidebarCategory(cat);
     setSidebarOpen(true);
   };
@@ -101,7 +106,7 @@ export default function Navbar() {
               href="/women"
               onMouseEnter={() => handleMouseEnterNav("women")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={() => handleClickNav("women")}
+              onClick={(e) => handleClickNav(e, "women")}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("women")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"
@@ -115,7 +120,7 @@ export default function Navbar() {
               href="/men"
               onMouseEnter={() => handleMouseEnterNav("men")}
               onMouseLeave={handleMouseLeaveNav}
-              onClick={() => handleClickNav("men")}
+              onClick={(e) => handleClickNav(e, "men")}
               className={`relative py-1 hover:text-black transition-colors ${
                 isCategoryActive("men")
                   ? "text-black font-semibold after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-black"

@@ -60,15 +60,16 @@ export default function MenuSidebar({
       {/*
         ─────────────────────────────────────────────────────────────
         BACKDROP OVERLAY
-        Independent opacity animation (~260ms), sits at z-50 above navbar (z-40)
+        Independent opacity animation (~240ms), sits at z-30 below navbar (z-40).
+        Dims the page without blocking navbar interactions.
         ─────────────────────────────────────────────────────────────
       */}
       <div
         onClick={onClose}
         style={{
-          transition: "opacity 260ms ease-out",
+          transition: "opacity 240ms ease-out",
         }}
-        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] ${
+        className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -77,18 +78,18 @@ export default function MenuSidebar({
       {/*
         ─────────────────────────────────────────────────────────────
         SIDEBAR DRAWER LAYER
-        Located ABOVE the navbar: z-60 (higher than z-40 navbar and z-50 backdrop).
-        Animates swiftly from left to right via transform: translate3d.
+        Located ABOVE the navbar: z-50 (higher than z-40 navbar and z-30 backdrop).
+        Animates swiftly from left to right in 280ms via GPU transform: translate3d.
         ─────────────────────────────────────────────────────────────
       */}
       <aside
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
-          transition: "transform 320ms cubic-bezier(0.16, 1, 0.3, 1)",
+          transition: "transform 280ms cubic-bezier(0.16, 1, 0.3, 1)",
           willChange: "transform",
         }}
-        className={`fixed top-0 left-0 h-[100dvh] z-[60] w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
+        className={`fixed top-0 left-0 h-[100dvh] z-50 w-full sm:w-[420px] md:w-[460px] bg-[#fafaf8] text-[#09090b] shadow-2xl border-r border-black/[0.08] flex flex-col justify-between ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
