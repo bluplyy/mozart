@@ -12,7 +12,6 @@ import {
   RotateCcw,
   ArrowLeft,
   CheckCircle2,
-  ExternalLink,
 } from "lucide-react";
 
 export default function CustomerSignUpPage() {
@@ -277,33 +276,7 @@ export default function CustomerSignUpPage() {
               </div>
             )}
 
-            {/* Quick Action Buttons to Open Gmail or Webmail Client */}
-            <div className="space-y-3 pt-2">
-              <a
-                href="https://mail.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-4 flex items-center justify-center space-x-2 transition-colors shadow-sm"
-              >
-                <span>Open Gmail</span>
-                <ExternalLink size={13} />
-              </a>
 
-              <Link
-                href="/gmail"
-                target="_blank"
-                className="w-full border border-neutral-300 hover:border-black text-neutral-800 text-[10px] tracking-[0.2em] uppercase font-semibold py-3 px-4 flex items-center justify-center space-x-2 transition-colors bg-neutral-50 hover:bg-white"
-              >
-                <span>Open Webmail Inbox</span>
-                <ExternalLink size={12} />
-              </Link>
-            </div>
-
-            {/* Real-time waiting status */}
-            <div className="mt-8 pt-6 border-t border-black/[0.06] flex items-center justify-center space-x-2 text-[11px] text-neutral-500 font-mono">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <span>Waiting for email confirmation...</span>
-            </div>
 
             {/* Resend Confirmation Link Section */}
             <div className="mt-4 text-center text-[12px] text-neutral-500">
