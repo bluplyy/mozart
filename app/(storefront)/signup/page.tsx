@@ -68,7 +68,7 @@ export default function CustomerSignUpPage() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agree) {
-      setError("Please accept the Mozart Atelier Charter to proceed.");
+      setError("Please accept the Mozart Studio Terms to proceed.");
       return;
     }
     setError(null);
@@ -143,13 +143,13 @@ export default function CustomerSignUpPage() {
               ? "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200&auto=format&fit=crop"
               : "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop"
           }
-          alt="Mozart Atelier Registration"
+          alt="Mozart Studio Registration"
           className="w-full h-full object-cover opacity-80 transition-all duration-1000"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
         <div className="absolute bottom-12 left-10 right-10 text-white">
           <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 block mb-2 font-mono">
-            {step === "form" ? "STEP 01 / DOSSIER CREATION" : "STEP 02 / CODE VERIFICATION"}
+            {step === "form" ? "STEP 01 / PROFILE CREATION" : "STEP 02 / CODE VERIFICATION"}
           </span>
           <h3 className="font-serif text-3xl tracking-[0.1em] uppercase font-normal mb-3">
             {step === "form" ? "Join The Mozart Gazette" : "Authenticate Identity"}
@@ -157,7 +157,7 @@ export default function CustomerSignUpPage() {
           <p className="text-[12px] text-neutral-300 font-light leading-relaxed tracking-wide">
             {step === "form"
               ? "Registered patrons receive priority access to seasonal runway drops, complimentary bespoke tailoring consultations, and expedited courier delivery."
-              : "To protect the integrity of the Mozart Maison archive, each client profile is authenticated with an encrypted 6-digit confirmation code."}
+              : "To protect the integrity of the Mozart Studio archive, each client profile is authenticated with an encrypted 6-digit confirmation code."}
           </p>
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function CustomerSignUpPage() {
                 Create Client Profile
               </h1>
               <p className="text-[12px] text-neutral-500 font-light tracking-wide mt-2">
-                Enter your details to receive an Atelier verification code.
+                Enter your details to receive a Studio verification code.
               </p>
             </div>
 
@@ -251,7 +251,7 @@ export default function CustomerSignUpPage() {
                   className="mt-1 h-4 w-4 rounded-none border-neutral-400 text-black focus:ring-0 cursor-pointer"
                 />
                 <label htmlFor="terms" className="text-[11px] text-neutral-600 leading-relaxed cursor-pointer font-light">
-                  I agree to the <span className="underline">Mozart Atelier Charter</span> and acknowledge that a 6-digit confirmation code will be dispatched to my email.
+                  I agree to the <span className="underline">Mozart Studio Terms</span> and acknowledge that a 6-digit confirmation code will be dispatched to my email.
                 </label>
               </div>
 
@@ -287,7 +287,7 @@ export default function CustomerSignUpPage() {
               className="flex items-center space-x-1.5 text-[10px] tracking-[0.2em] uppercase text-neutral-500 hover:text-black mb-6 transition-colors"
             >
               <ArrowLeft size={13} />
-              <span>Back to Edit Dossier</span>
+              <span>Back to Edit Profile</span>
             </button>
 
             <div className="mb-8 text-center">
@@ -325,7 +325,7 @@ export default function CustomerSignUpPage() {
               {/* 6-Digit Box Input Component */}
               <div>
                 <label className="block text-[10px] uppercase tracking-[0.25em] text-neutral-500 font-semibold mb-3 text-center">
-                  Enter 6-Digit Atelier Code
+                  Enter 6-Digit Studio Code
                 </label>
                 <OtpInput
                   value={otpCode}
@@ -345,7 +345,7 @@ export default function CustomerSignUpPage() {
                       Check Your Gmail or Email Application
                     </p>
                     <p>
-                      Your 6-digit confidential atelier verification code has been dispatched to{" "}
+                      Your 6-digit confidential studio verification code has been dispatched to{" "}
                       <strong className="font-mono text-neutral-900 font-semibold">{email}</strong>.
                       Please open your email application to retrieve your code.
                     </p>

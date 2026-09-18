@@ -148,18 +148,18 @@ export default function MenuSidebar({
           </nav>
         </div>
 
-        {/* Bottom Drawer Footer: Editorial Maison Note */}
+        {/* Bottom Drawer Footer: Editorial Studio Note */}
         <div className="px-8 py-8 border-t border-black/[0.06] bg-[#f4f3ee]/60">
           <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-500 font-semibold mb-2">
             <Sparkles size={12} className="text-neutral-700" />
-            <span>MOZART Haute Couture</span>
+            <span>MOZART High Fashion</span>
           </div>
           <p className="text-[11px] text-neutral-500 font-light leading-relaxed">
             Curated seasonal collections crafted in Biella, Florence, and Paris. Handcrafted in strictly numbered editions.
           </p>
           <div className="mt-4 pt-4 border-t border-black/[0.05] flex items-center justify-between text-[10px] font-mono tracking-widest text-neutral-400">
-            <span>PARIS SALON</span>
-            <span>12 PLACE VENDÔME</span>
+            <span>PARIS STUDIO</span>
+            <span>12 VENDOME SQUARE</span>
           </div>
         </div>
       </aside>

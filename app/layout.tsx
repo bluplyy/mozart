@@ -6,7 +6,7 @@ import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/storefront/CartDrawer";
 
 export const metadata: Metadata = {
-  title: "MOZART | Haute Couture Paris",
+  title: "MOZART | High Fashion Paris",
   description: "Minimalist luxury fashion house. Discover bespoke tailored collections for Men and Women.",
 };
 

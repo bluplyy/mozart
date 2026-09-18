@@ -80,7 +80,7 @@ export default function CartDrawer() {
               Reference: {orderRef}
             </p>
             <p className="text-[13px] text-neutral-600 leading-relaxed font-light mb-8 max-w-xs">
-              Thank you for acquiring from Mozart. Our concierge team is preparing your signature parcel at our Paris atelier.
+              Thank you for acquiring from Mozart. Our concierge team is preparing your signature parcel at our Paris studio.
             </p>
             <button
               onClick={() => {
@@ -178,7 +178,7 @@ export default function CartDrawer() {
               <span className="font-sans font-semibold text-base">{formattedSubtotal}</span>
             </div>
             <p className="text-[10px] tracking-[0.1em] text-neutral-500 font-light mb-6 flex items-center space-x-1">
-              <span>✓ Complimentary insured express delivery & atelier wrapping</span>
+              <span>✓ Complimentary insured express delivery & signature gift wrapping</span>
             </p>
 
             <button

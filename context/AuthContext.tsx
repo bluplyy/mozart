@@ -144,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           
           // Role gate checking
           if (portal === "admin" && assignedRole !== "admin") {
-            return { success: false, error: "Access denied. This account does not possess Atelier Curator privileges." };
+            return { success: false, error: "Access denied. This account does not possess Studio Curator privileges." };
           }
 
           const authenticatedUser: AuthUser = {

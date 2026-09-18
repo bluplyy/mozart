@@ -19,7 +19,7 @@ export default function HomePage() {
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2000&auto=format&fit=crop"
-            alt="Mozart Haute Couture Campaign"
+            alt="Mozart Designer Campaign"
             className="w-full h-full object-cover object-center opacity-70 scale-100 hover:scale-105 transition-transform duration-1000 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
@@ -53,11 +53,11 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
             <div className="relative z-10">
               <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 block mb-2">
-                Haute Horlogerie & Attire
+                Fine Timepieces & Attire
               </span>
               <div className="flex items-center justify-between">
                 <h3 className="font-serif text-4xl tracking-[0.15em] uppercase font-normal">
-                  L'Homme / Men
+                  Men's Collection
                 </h3>
                 <span className="w-12 h-12 rounded-full border border-white/40 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
                   <ArrowUpRight size={18} />
@@ -82,11 +82,11 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
             <div className="relative z-10">
               <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 block mb-2">
-                Runway, Leather & Salon
+                Runway, Leather & Studio
               </span>
               <div className="flex items-center justify-between">
                 <h3 className="font-serif text-4xl tracking-[0.15em] uppercase font-normal">
-                  La Femme / Women
+                  Women's Collection
                 </h3>
                 <span className="w-12 h-12 rounded-full border border-white/40 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
                   <ArrowUpRight size={18} />
@@ -108,7 +108,7 @@ export default function HomePage() {
               Curated Selection
             </span>
             <h2 className="font-serif text-3xl tracking-[0.15em] uppercase font-normal text-[#09090b]">
-              Atelier Highlights
+              Studio Highlights
             </h2>
           </div>
           <div className="flex items-center space-x-8 text-[11px] uppercase tracking-[0.2em]">
@@ -141,17 +141,17 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 4. THE ATELIER MANIFESTO */}
+      {/* 4. THE STUDIO MANIFESTO */}
       <section id="atelier" className="bg-[#09090b] text-[#fafaf8] py-28">
         <div className="max-w-[1300px] mx-auto px-8 text-center">
           <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 font-semibold block mb-8">
-            Haute Couture Manifesto
+            High Fashion Manifesto
           </span>
           <blockquote className="font-serif text-3xl md:text-5xl lg:text-5xl tracking-[0.08em] uppercase font-normal leading-[1.3] max-w-4xl mx-auto mb-12">
             "A garment is not merely attire. It is personal architecture—a geometry of presence constructed to defy ephemerality."
           </blockquote>
           <span className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 block">
-            — Atelier Mozart, Place Vendôme, Paris
+            — Mozart Design Studio, Paris
           </span>
         </div>
       </section>

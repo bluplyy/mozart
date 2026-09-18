@@ -22,10 +22,10 @@ export default function Footer() {
         <div className="grid grid-cols-12 gap-12 pb-20 border-b border-neutral-800">
           <div className="col-span-6 pr-12">
             <h3 className="font-serif text-3xl tracking-[0.2em] uppercase text-white font-normal mb-4">
-              Enter The Mozart Atelier
+              Enter The Mozart Studio
             </h3>
             <p className="text-neutral-400 text-[13px] leading-relaxed max-w-md font-light mb-8">
-              Subscribe to receive private salon invitations, preview seasonal lookbooks, and access bespoke haute couture appointments.
+              Subscribe to receive private studio invitations, preview seasonal lookbooks, and access bespoke high fashion appointments.
             </p>
             {subscribed ? (
               <div className="text-[12px] uppercase tracking-[0.2em] text-neutral-300 py-3 border-b border-neutral-700">
@@ -58,7 +58,7 @@ export default function Footer() {
             <ul className="space-y-3.5 text-[12px] tracking-[0.12em] uppercase text-neutral-300">
               <li>
                 <Link href="/men" className="hover:text-white transition-colors">
-                  Men's Haute Horlogerie & Attire
+                  Men's Fine Timepieces & Attire
                 </Link>
               </li>
               <li>
@@ -81,7 +81,7 @@ export default function Footer() {
             <ul className="space-y-3.5 text-[12px] tracking-[0.12em] uppercase text-neutral-300">
               <li>
                 <span className="hover:text-white cursor-pointer transition-colors">
-                  Bespoke Atelier Appointments
+                  Bespoke Studio Appointments
                 </span>
               </li>
               <li>
@@ -109,10 +109,10 @@ export default function Footer() {
             <ul className="space-y-2 text-[12px] tracking-[0.1em] text-neutral-400 font-light">
               <li>
                 <span className="text-white block font-normal">Paris Flagship</span>
-                12 Place Vendôme, 75001
+                12 Vendome Square, 75001 Paris
               </li>
               <li className="pt-2">
-                <span className="text-white block font-normal">Milan Salone</span>
+                <span className="text-white block font-normal">Milan Showroom</span>
                 Via Montenapoleone 8, 20121
               </li>
               <li className="pt-2">
@@ -129,7 +129,7 @@ export default function Footer() {
             MOZART
           </div>
           <div>
-            © {new Date().getFullYear()} MOZART HAUTE COUTURE. ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} MOZART HIGH FASHION. ALL RIGHTS RESERVED.
           </div>
           <div className="flex space-x-6">
             <span className="hover:text-neutral-300 cursor-pointer">Privacy Policy</span>

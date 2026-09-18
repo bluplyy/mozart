@@ -56,7 +56,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200&auto=format&fit=crop",
     secondary_image_url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
     description: "A masterwork of bias-cut couture construction. Drapes diagonally across the torso into a column silhouette, evoking ancient Grecian statuary with modern Parisian restraint.",
-    details: "70% Silk Twill, 30% Virgin Wool • Invisible Back Zip • Haute Couture Atelier, Paris",
+    details: "70% Silk Twill, 30% Virgin Wool • Invisible Back Zip • High Fashion Studio, Paris",
     created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
   },
   {
@@ -72,13 +72,13 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "mzt-women-03",
-    title: "The Mozart Monogram Grand Sac",
+    title: "The Mozart Monogram Large Bag",
     category: "Women",
     price: 4200,
     image_url: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1200&auto=format&fit=crop",
     secondary_image_url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop",
     description: "Sculpted from hand-buffed calf leather with palladium-finish brass hardware. Clean geometrical lines with a microfiber suede interior and dual magnetic latch.",
-    details: "Taurillon Calfskin • Hand-Lacquered Raw Edges • Crafted in Tuscany",
+    details: "Grained Calfskin • Hand-Lacquered Raw Edges • Crafted in Tuscany",
     created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
   {

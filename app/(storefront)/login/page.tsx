@@ -49,7 +49,7 @@ export default function CustomerLoginPage() {
       <div className="col-span-5 relative h-[720px] bg-black overflow-hidden shadow-2xl">
         <img
           src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop"
-          alt="Mozart Salon"
+          alt="Mozart Studio"
           className="w-full h-full object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
@@ -58,7 +58,7 @@ export default function CustomerLoginPage() {
             Client Privilege
           </span>
           <h3 className="font-serif text-3xl tracking-[0.1em] uppercase font-normal mb-3">
-            Private Salon Access
+            Private Studio Access
           </h3>
           <p className="text-[12px] text-neutral-300 font-light leading-relaxed tracking-wide">
             Sign in to access your bespoke orders, preview private runway collections, and communicate with your dedicated Paris concierge.
@@ -70,13 +70,13 @@ export default function CustomerLoginPage() {
       <div className="col-span-7 max-w-lg mx-auto w-full py-8">
         <div className="mb-10 text-center">
           <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 font-semibold block mb-2">
-            Haute Couture Authentication
+            Client Authentication
           </span>
           <h1 className="font-serif text-4xl tracking-[0.15em] uppercase text-neutral-900 font-normal">
             Client Sign In
           </h1>
           <p className="text-[12px] text-neutral-500 font-light tracking-wide mt-2">
-            Enter your email and credentials to enter the Mozart Salon.
+            Enter your email and credentials to enter the Mozart Studio.
           </p>
         </div>
 
@@ -140,7 +140,7 @@ export default function CustomerLoginPage() {
             disabled={loading}
             className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
           >
-            <span>{loading ? "Authenticating..." : "Enter Client Salon"}</span>
+            <span>{loading ? "Authenticating..." : "Enter Client Portal"}</span>
             <ArrowRight size={14} />
           </button>
         </form>
@@ -164,7 +164,7 @@ export default function CustomerLoginPage() {
             href="/signup"
             className="text-neutral-900 font-semibold uppercase tracking-wider underline underline-offset-4 hover:text-neutral-600"
           >
-            Join The Atelier
+            Join The Studio
           </Link>
         </div>
       </div>

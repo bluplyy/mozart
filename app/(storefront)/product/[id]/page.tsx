@@ -52,13 +52,13 @@ export default function ProductDetailPage() {
           Creation Not Found
         </h2>
         <p className="text-[12px] uppercase tracking-wider text-neutral-500 mb-8">
-          This piece may have been de-listed or archived by the atelier.
+          This piece may have been de-listed or archived by the studio.
         </p>
         <Link
           href="/"
           className="inline-block bg-black text-white text-[11px] tracking-[0.25em] uppercase py-3.5 px-8"
         >
-          Return to Atelier
+          Return to Studio
         </Link>
       </div>
     );
@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
       <div className="flex items-center justify-between border-b border-black/[0.08] pb-6 mb-12">
         <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-400">
           <Link href="/" className="hover:text-black">
-            Atelier
+            Home
           </Link>
           <span>/</span>
           <Link href={product.category === "Men" ? "/men" : "/women"} className="hover:text-black">
@@ -139,7 +139,7 @@ export default function ProductDetailPage() {
           <div>
             <div className="flex items-center space-x-3 mb-2">
               <span className="bg-black text-white text-[9px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1">
-                {product.category}'s Haute Couture
+                {product.category}'s High Fashion
               </span>
               <span className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 font-mono">
                 REF: {product.id.slice(0, 10).toUpperCase()}
@@ -246,7 +246,7 @@ export default function ProductDetailPage() {
               }`}
             >
               {product.description ||
-                "Neverfull MM hadir kembali dalam Monogram Emblème khas Rumah Mode, dibuat dari bahan sensorial jacquard yang terinspirasi dari canvas orisinal tahun 1896. Tas ini menyatukan keahlian pengerjaan atelier dengan siluet kontemporer yang abadi."}
+                "Neverfull MM hadir kembali dalam Monogram Emblem khas Rumah Mode, dibuat dari bahan sensorial jacquard yang terinspirasi dari canvas orisinal tahun 1896. Tas ini menyatukan keahlian pengerjaan studio dengan siluet kontemporer yang abadi."}
             </p>
             <button
               type="button"
@@ -306,7 +306,7 @@ export default function ProductDetailPage() {
               {openSection === "product_care" && (
                 <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
                   {product.product_care ||
-                    "Untuk menjaga keindahan dan daya tahan busana haute couture ini:\n• Simpan dalam dust bag katun berpori di ruangan dengan suhu sejuk dan stabil.\n• Hindari paparan langsung air, cairan kimiawi, parfum, dan sinar matahari berlebih.\n• Disarankan perawatan melalui dry cleaning profesional bersertifikasi haute couture."}
+                    "Untuk menjaga keindahan dan daya tahan busana eksklusif ini:\n• Simpan dalam dust bag katun berpori di ruangan dengan suhu sejuk dan stabil.\n• Hindari paparan langsung air, cairan kimiawi, parfum, dan sinar matahari berlebih.\n• Disarankan perawatan melalui dry cleaning profesional bersertifikasi."}
                 </div>
               )}
             </div>
@@ -332,7 +332,7 @@ export default function ProductDetailPage() {
               {openSection === "boutique_availability" && (
                 <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
                   {product.boutique_availability ||
-                    "Koleksi ini tersedia untuk reservasi privat di butik resmi MOZART:\n• Jakarta: Plaza Indonesia, Level 1 (Atelier Boutique)\n• Paris: 12 Place Vendôme (Private Salon)\n• Milan: Via Montenapoleone\nSilakan hubungi Digital Advisor kami untuk menjadwalkan janji temu atau memastikan ketersediaan ukuran."}
+                    "Koleksi ini tersedia untuk reservasi privat di butik resmi MOZART:\n• Jakarta: Plaza Indonesia, Level 1 (Studio Boutique)\n• Paris: 12 Vendome Square (Private Showroom)\n• Milan: Via Montenapoleone\nSilakan hubungi Digital Advisor kami untuk menjadwalkan janji temu atau memastikan ketersediaan ukuran."}
                 </div>
               )}
             </div>

@@ -24,7 +24,7 @@ export default function WomenCollectionPage() {
       <div className="border-b border-black/[0.08] pb-10 mb-12">
         <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-400 mb-3">
           <Link href="/" className="hover:text-black">
-            Atelier
+            Home
           </Link>
           <span>/</span>
           <span className="text-black font-semibold">Women</span>

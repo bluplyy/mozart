@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
           <span>Return To Storefront</span>
         </Link>
         <span className="text-[10px] tracking-[0.3em] uppercase text-neutral-500 font-mono">
-          ATELIER CURATION SYSTEM
+          STUDIO CURATION SYSTEM
         </span>
       </div>
 
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
             Studio / Admin Portal
           </span>
           <p className="text-[12px] text-neutral-400 font-light mt-3 tracking-wide">
-            Restricted access. Dedicated to archive curators, inventory directors, and maison administrators.
+            Restricted access. Dedicated to archive curators, inventory directors, and studio administrators.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export default function AdminLoginPage() {
 
       {/* Footer info */}
       <div className="text-center text-[10px] tracking-[0.25em] uppercase text-neutral-600">
-        MOZART MAISON DIGITAL INFRASTRUCTURE • ALL SESSIONS MONITORED
+        MOZART STUDIO DIGITAL INFRASTRUCTURE • ALL SESSIONS MONITORED
       </div>
     </div>
   );

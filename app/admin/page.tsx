@@ -190,10 +190,10 @@ export default function AdminPage() {
         <div className="bg-[#fafaf8] p-6 border border-neutral-200">
           <div className="flex items-center justify-between text-neutral-400 mb-3">
             <span className="text-[10px] uppercase tracking-[0.25em] font-semibold">
-              Men's Atelier
+              Men's Collection
             </span>
             <span className="text-[10px] uppercase tracking-widest text-neutral-900 font-bold">
-              HOMME
+              MEN
             </span>
           </div>
           <div className="font-serif text-3xl text-neutral-900 font-normal">
@@ -205,10 +205,10 @@ export default function AdminPage() {
         <div className="bg-[#fafaf8] p-6 border border-neutral-200">
           <div className="flex items-center justify-between text-neutral-400 mb-3">
             <span className="text-[10px] uppercase tracking-[0.25em] font-semibold">
-              Women's Atelier
+              Women's Collection
             </span>
             <span className="text-[10px] uppercase tracking-widest text-neutral-900 font-bold">
-              FEMME
+              WOMEN
             </span>
           </div>
           <div className="font-serif text-3xl text-neutral-900 font-normal">

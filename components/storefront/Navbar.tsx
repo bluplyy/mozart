@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { ShoppingBag, Search, User, Menu } from "lucide-react";
+import { ShoppingBag, Search, User } from "lucide-react";
 import { useState, useRef } from "react";
 import MenuSidebar from "./MenuSidebar";
 
@@ -55,26 +55,13 @@ export default function Navbar() {
       <header className="sticky top-0 z-40 bg-[#fafaf8]/90 backdrop-blur-md border-b border-black/[0.06]">
         {/* Top micro announcement */}
         <div className="bg-[#09090b] text-[#fafaf8] text-[10px] tracking-[0.25em] uppercase py-2 text-center font-sans font-medium">
-          Complimentary Worldwide Courier & Signature Atelier Wrapping
+          Complimentary Worldwide Courier & Signature Studio Wrapping
         </div>
 
         {/* Main navigation row */}
         <div className="max-w-[1720px] mx-auto px-8 h-20 flex items-center justify-between">
-          {/* Left: Collections Navigation & Menu Button */}
+          {/* Left: Collections Navigation */}
           <nav className="flex items-center space-x-7 md:space-x-9 text-[12px] uppercase tracking-[0.2em] font-medium">
-            {/* Menu Button that triggers sidebar on hover & click */}
-            <button
-              type="button"
-              onClick={() => setSidebarOpen((prev) => !prev)}
-              onMouseEnter={() => handleMouseEnterNav(sidebarCategory)}
-              onMouseLeave={handleMouseLeaveNav}
-              className="flex items-center space-x-2 text-neutral-800 hover:text-black transition-colors group cursor-pointer"
-              aria-label="Open Navigation Menu"
-            >
-              <Menu size={16} strokeWidth={1.5} className="group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline">Menu</span>
-            </button>
-
             <Link
               href="/women"
               onMouseEnter={() => handleMouseEnterNav("women")}
@@ -99,13 +86,6 @@ export default function Navbar() {
               }`}
             >
               Men
-            </Link>
-
-            <Link
-              href="/#atelier"
-              className="text-neutral-500 hover:text-black transition-colors hidden lg:inline"
-            >
-              The Atelier
             </Link>
           </nav>
 

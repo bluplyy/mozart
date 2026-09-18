@@ -138,7 +138,7 @@ export default function GmailSimulatorPage() {
 
           <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 text-[11px] text-neutral-500 leading-relaxed">
             <p className="font-semibold text-neutral-800 mb-1">Gmail Client Mode</p>
-            This inbox captures incoming confirmation emails sent by the Mozart Maison registration system.
+            This inbox captures incoming confirmation emails sent by the Mozart Studio registration system.
           </div>
         </aside>
 
@@ -170,7 +170,7 @@ export default function GmailSimulatorPage() {
               >
                 <div className="flex items-center justify-between text-[11px] mb-1">
                   <span className="font-semibold text-neutral-900 truncate">
-                    Mozart Atelier Paris
+                    Mozart Studio Paris
                   </span>
                   <span className="text-neutral-400 text-[10px] shrink-0">
                     {new Date(email.sentAt).toLocaleTimeString([], {
@@ -202,7 +202,7 @@ export default function GmailSimulatorPage() {
                   </h2>
                   <div className="flex items-center space-x-2 text-[12px] text-neutral-500">
                     <span className="font-semibold text-neutral-900">
-                      Mozart Atelier Paris &lt;concierge@mozart.com&gt;
+                      Mozart Studio Paris &lt;concierge@mozart.com&gt;
                     </span>
                     <span>to</span>
                     <span className="font-mono text-neutral-800">{selectedEmail.to}</span>
@@ -249,7 +249,7 @@ export default function GmailSimulatorPage() {
               <Mail size={48} className="mb-3 opacity-30" />
               <p className="text-base font-medium text-neutral-700">Select an email to read</p>
               <p className="text-[12px] text-neutral-400 mt-1 max-w-sm">
-                Incoming verification codes from the Mozart Atelier will be displayed here in full Gmail layout.
+                Incoming verification codes from the Mozart Studio will be displayed here in full Gmail layout.
               </p>
             </div>
           )}

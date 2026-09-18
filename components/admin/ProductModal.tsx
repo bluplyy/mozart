@@ -60,10 +60,10 @@ export default function ProductModal({
       setTitle("");
       setCategory("Men");
       setPrice("2200");
-      setDescription("Hadir kembali dalam siluet eksklusif khas Rumah Mode MOZART, dibuat dari bahan sensorial berkualitas tinggi yang terinspirasi dari arsip atelier klasik.");
-      setSustainability("100% serat alami diproduksi secara etis dan berkelanjutan di atelier bersejarah mitra kami di Eropa.");
+      setDescription("Hadir kembali dalam siluet eksklusif khas Rumah Mode MOZART, dibuat dari bahan sensorial berkualitas tinggi yang terinspirasi dari arsip studio klasik.");
+      setSustainability("100% serat alami diproduksi secara etis dan berkelanjutan di studio bersejarah mitra kami di Eropa.");
       setProductCare("Cuci kering profesional (dry clean only). Simpan pada gantungan kayu berukir dan gunakan pelindung busana katun.");
-      setBoutiqueAvailability("Tersedia di Salon Privat Paris (12 Place Vendôme) dan Butik Pilihan Milan.");
+      setBoutiqueAvailability("Tersedia di Studio Privat Paris (12 Vendome Square) dan Butik Pilihan Milan.");
       setAvailableSizes(["XS", "S", "M", "L", "XL"]);
       setImages([
         "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
@@ -130,7 +130,7 @@ export default function ProductModal({
         <div className="px-8 py-6 border-b border-black/[0.08] flex items-center justify-between">
           <div>
             <h2 className="font-serif text-2xl tracking-[0.15em] uppercase text-neutral-900 font-medium">
-              {initialData ? "Edit Mozart Piece" : "New Haute Couture Piece"}
+              {initialData ? "Edit Mozart Piece" : "New High Fashion Piece"}
             </h2>
             <p className="text-[11px] uppercase tracking-[0.2em] text-neutral-500 mt-1">
               {initialData ? `Catalog Reference: ${initialData.id}` : "Publish new creation to the archive"}

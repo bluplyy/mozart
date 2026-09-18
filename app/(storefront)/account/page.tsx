@@ -46,17 +46,17 @@ export default function CustomerAccountPage() {
         <div>
           <div className="flex items-center space-x-2 text-[10px] tracking-[0.25em] uppercase text-neutral-400 mb-3">
             <Link href="/" className="hover:text-black">
-              Atelier
+              Home
             </Link>
             <span>/</span>
-            <span className="text-black font-semibold">Client Dossier</span>
+            <span className="text-black font-semibold">Client Profile</span>
           </div>
 
           <h1 className="font-serif text-5xl tracking-[0.08em] uppercase font-normal text-neutral-900">
             Welcome, {user.name}
           </h1>
           <p className="text-neutral-500 text-[13px] font-light tracking-wide mt-2">
-            Mozart Haute Couture Private Salon • Member ID: {user.id.toUpperCase()}
+            Mozart Private Studio • Member ID: {user.id.toUpperCase()}
           </p>
         </div>
 
@@ -80,10 +80,10 @@ export default function CustomerAccountPage() {
                 TIER STATUS
               </span>
               <h3 className="font-serif text-2xl tracking-[0.15em] uppercase mb-4 text-white">
-                Private Salon Patron
+                Private Studio Patron
               </h3>
               <p className="text-[12px] text-neutral-400 font-light leading-relaxed mb-6">
-                Direct salon privilege with complimentary bespoke fittings in Paris and Milan ateliers.
+                Direct studio privilege with complimentary bespoke fittings in Paris and Milan studios.
               </p>
 
               <div className="border-t border-neutral-800 pt-4 flex items-center justify-between text-[11px] text-neutral-300">
@@ -119,7 +119,7 @@ export default function CustomerAccountPage() {
                   Primary Delivery Residence
                 </span>
                 <span className="text-neutral-900">
-                  12 Place Vendôme, 1er Arrondissement, Paris, France
+                  12 Vendome Square, 1st District, Paris, France
                 </span>
               </div>
             </div>
@@ -133,7 +133,7 @@ export default function CustomerAccountPage() {
               <div className="flex items-center space-x-3">
                 <Package size={18} className="text-neutral-700" />
                 <h3 className="font-serif text-2xl tracking-[0.1em] uppercase text-neutral-900 font-normal">
-                  Atelier Acquisition History
+                  Studio Order History
                 </h3>
               </div>
               <span className="text-[11px] uppercase tracking-widest text-neutral-400">
@@ -162,7 +162,7 @@ export default function CustomerAccountPage() {
                       Double-Breasted Cashmere Overcoat
                     </h4>
                     <span className="text-[11px] text-neutral-500 font-light mt-0.5 block">
-                      Size: 48 EU • Status: Atelier Hand-Finished & Dispatched via DHL Express
+                      Size: 48 EU • Status: Studio Hand-Finished & Dispatched via DHL Express
                     </span>
                   </div>
                 </div>
@@ -193,10 +193,10 @@ export default function CustomerAccountPage() {
                       REF: MZT-712849 • 28 AUG 2026
                     </span>
                     <h4 className="text-[13px] tracking-wider uppercase font-medium text-neutral-900 mt-1">
-                      The Mozart Monogram Grand Sac
+                      The Mozart Monogram Large Bag
                     </h4>
                     <span className="text-[11px] text-neutral-500 font-light mt-0.5 block">
-                      One Size • Status: Delivered to Paris Salon
+                      One Size • Status: Delivered to Paris Showroom
                     </span>
                   </div>
                 </div>
