@@ -35,9 +35,6 @@ export default function MenCollectionPage() {
             <h1 className="font-serif text-5xl tracking-[0.1em] uppercase font-normal text-neutral-900">
               Men's Collection
             </h1>
-            <p className="text-neutral-500 text-[13px] font-light tracking-wide mt-2">
-              Sartorial discipline, architectural cashmere overcoats, and evening formalwear.
-            </p>
           </div>
 
           <div className="flex items-center space-x-6 text-[11px] uppercase tracking-[0.2em]">

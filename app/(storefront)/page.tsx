@@ -30,11 +30,8 @@ export default function HomePage() {
       {/* 2. THE TWO UNIVERSES: DUAL SPLIT PORTAL */}
       <section id="split-showcase" className="max-w-[1720px] mx-auto px-8">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 block mb-3 font-semibold">
-            Two Distinct Universes
-          </span>
           <h2 className="font-serif text-4xl tracking-[0.15em] uppercase font-normal text-[#09090b]">
-            The Dual Collections
+            Collections
           </h2>
           <div className="w-12 h-[1px] bg-black/20 mx-auto mt-6" />
         </div>

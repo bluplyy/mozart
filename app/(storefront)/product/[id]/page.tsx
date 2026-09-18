@@ -8,8 +8,6 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Check,
-  ShieldCheck,
-  Truck,
   Plus,
   Minus,
   Heart,
@@ -403,10 +401,6 @@ export default function ProductDetailPage() {
                 <span>Add To Shopping Bag • {formattedPrice}</span>
               )}
             </button>
-
-            <p className="text-[10px] tracking-[0.1em] text-neutral-400 text-center font-light uppercase">
-              Taxes and insured courier calculated at checkout
-            </p>
           </div>
 
           {/* Digital Advisor Assistance Callout */}
@@ -525,18 +519,6 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Delivery & Provenance Trust Signals */}
-          <div className="pt-4 flex items-center justify-between text-[10px] uppercase tracking-[0.15em] text-neutral-500 font-light">
-            <span className="flex items-center space-x-1.5">
-              <Truck size={13} className="text-neutral-700" />
-              <span>Complimentary Express Courier</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <ShieldCheck size={13} className="text-neutral-700" />
-              <span>NFC Authenticated Piece</span>
-            </span>
           </div>
         </aside>
       </main>
