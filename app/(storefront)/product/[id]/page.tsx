@@ -105,7 +105,6 @@ export default function ProductDetailPage() {
   const { addToCart } = useCart();
 
   const [selectedSize, setSelectedSize] = useState("M");
-  const [selectedColor, setSelectedColor] = useState("Noir Obsidian");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [added, setAdded] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
@@ -186,12 +185,6 @@ export default function ProductDetailPage() {
     setTimeout(() => setAdded(false), 2000);
   };
 
-  // Curated color variants
-  const COLOR_VARIANTS = [
-    { name: "Noir Obsidian", hex: "#171717" },
-    { name: "Ivoire Crème", hex: "#ebe6dc" },
-    { name: "Fauve Camel", hex: "#8c5b36" },
-  ];
 
   // Prepare gallery images (ensuring multiple stacked editorial looks)
   const galleryImages = (() => {
@@ -347,38 +340,6 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Color / Variant Selector */}
-          <div>
-            <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
-              <span className="font-semibold text-neutral-800">
-                Color:{" "}
-                <span className="font-normal text-neutral-500">
-                  {selectedColor}
-                </span>
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              {COLOR_VARIANTS.map((c) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  onClick={() => setSelectedColor(c.name)}
-                  aria-label={`Select color ${c.name}`}
-                  className={`group relative flex items-center justify-center w-8 h-8 rounded-full border transition-all ${
-                    selectedColor === c.name
-                      ? "ring-2 ring-black ring-offset-2 ring-offset-[#fafaf8] border-black"
-                      : "border-black/20 hover:border-black"
-                  }`}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full border border-black/10"
-                    style={{ backgroundColor: c.hex }}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Size Selector */}
           <div>
