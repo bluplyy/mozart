@@ -57,9 +57,6 @@ export async function POST(req: Request) {
                     <span style="font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase; color: #09090b; display: block;">
                       M O Z A R T
                     </span>
-                    <span style="font-size: 9px; font-weight: 500; letter-spacing: 0.35em; text-transform: uppercase; color: #71717a; display: block; margin-top: 6px;">
-                      Haute Couture • Place Vendôme • Paris
-                    </span>
                   </td>
                 </tr>
 
@@ -69,13 +66,6 @@ export async function POST(req: Request) {
                     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color: #ffffff; border: 1px solid #e7e7e5; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);">
                       <tr>
                         <td class="card-content" style="padding: 48px 44px;">
-                          <!-- Badge -->
-                          <div style="text-align: center; margin-bottom: 16px;">
-                            <span style="font-family: monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #71717a; background-color: #f4f4f2; padding: 5px 14px; border: 1px solid #e4e4e2; display: inline-block;">
-                              STUDIO PRIVILEGE ACTIVATION
-                            </span>
-                          </div>
-
                           <!-- Heading -->
                           <div style="text-align: center; margin-bottom: 24px;">
                             <h1 style="margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: #09090b;">
@@ -107,35 +97,7 @@ export async function POST(req: Request) {
                             </table>
                           </div>
 
-                          <!-- Perks -->
-                          <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#fafaf8" style="background-color: #fafaf8; border: 1px solid #eeeeea; margin-bottom: 32px;">
-                            <tr>
-                              <td style="padding: 22px 26px;">
-                                <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #71717a; display: block; margin-bottom: 12px;">
-                                  Patron Privileges Included
-                                </span>
-                                <div style="font-size: 12px; color: #3f3f46; line-height: 1.8; font-weight: 300;">
-                                  • &nbsp;Priority access to seasonal haute couture collections &amp; runway releases<br/>
-                                  • &nbsp;Bespoke salon fittings at Paris Flagship &amp; Milan Showrooms<br/>
-                                  • &nbsp;Direct concierge styling assistance and insured global courier delivery
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
-
-                          <!-- Fallback link -->
-                          <div style="font-size: 11px; line-height: 1.6; color: #71717a; border-top: 1px solid #f0f0ee; padding-top: 24px;">
-                            <p style="margin: 0 0 6px 0;">
-                              If you encounter any difficulty with the button above, copy and paste this URL into your browser:
-                            </p>
-                            <p style="margin: 0; word-break: break-all;">
-                              <a href="${confirmLink}" style="color: #09090b; text-decoration: underline; font-family: monospace; font-size: 11px;">
-                                ${confirmLink}
-                              </a>
-                            </p>
-                          </div>
-
-                          <div style="padding-top: 20px; font-size: 11px; color: #a1a1aa; line-height: 1.5; font-weight: 300;">
+                          <div style="padding-top: 20px; font-size: 11px; color: #a1a1aa; line-height: 1.5; font-weight: 300; border-top: 1px solid #f0f0ee;">
                             This confidential link will expire in 24 hours. If you did not create an account on MOZART, no further action is required.
                           </div>
                         </td>
