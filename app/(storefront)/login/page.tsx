@@ -107,7 +107,7 @@ export default function CustomerLoginPage() {
             disabled={loading}
             className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
           >
-            <span>{loading ? "Authenticating..." : "Enter Client Portal"}</span>
+            <span>{loading ? "Authenticating..." : "ENTER"}</span>
             <ArrowRight size={14} />
           </button>
         </form>
@@ -119,7 +119,7 @@ export default function CustomerLoginPage() {
             href="/signup"
             className="text-neutral-900 font-semibold uppercase tracking-wider underline underline-offset-4 hover:text-neutral-600"
           >
-            Join The Studio
+            SIGN UP
           </Link>
         </div>
       </div>

@@ -134,43 +134,12 @@ export default function CustomerSignUpPage() {
   };
 
   return (
-    <div className="min-h-[85vh] grid grid-cols-12 max-w-[1720px] mx-auto px-8 py-12 gap-12 items-center">
-      {/* Left Column: Editorial Campaign Visual (5 cols) */}
-      <div className="col-span-5 relative h-[780px] bg-black overflow-hidden shadow-2xl">
-        <img
-          src={
-            step === "form"
-              ? "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200&auto=format&fit=crop"
-              : "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop"
-          }
-          alt="Mozart Studio Registration"
-          className="w-full h-full object-cover opacity-80 transition-all duration-1000"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-        <div className="absolute bottom-12 left-10 right-10 text-white">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400 block mb-2 font-mono">
-            {step === "form" ? "STEP 01 / PROFILE CREATION" : "STEP 02 / CODE VERIFICATION"}
-          </span>
-          <h3 className="font-serif text-3xl tracking-[0.1em] uppercase font-normal mb-3">
-            {step === "form" ? "Join The Mozart Gazette" : "Authenticate Identity"}
-          </h3>
-          <p className="text-[12px] text-neutral-300 font-light leading-relaxed tracking-wide">
-            {step === "form"
-              ? "Registered patrons receive priority access to seasonal runway drops, complimentary bespoke tailoring consultations, and expedited courier delivery."
-              : "To protect the integrity of the Mozart Studio archive, each client profile is authenticated with an encrypted 6-digit confirmation code."}
-          </p>
-        </div>
-      </div>
-
-      {/* Right Column: Form or Verification Screen (7 cols) */}
-      <div className="col-span-7 max-w-lg mx-auto w-full py-6">
+    <div className="min-h-[85vh] flex items-center justify-center max-w-[1720px] mx-auto px-8 py-16">
+      <div className="max-w-md mx-auto w-full py-6">
         {step === "form" ? (
           /* STEP 1: REGISTRATION FORM */
           <div>
             <div className="mb-8 text-center">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 font-semibold block mb-2">
-                New Client Registration
-              </span>
               <h1 className="font-serif text-4xl tracking-[0.15em] uppercase text-neutral-900 font-normal">
                 Create Client Profile
               </h1>
