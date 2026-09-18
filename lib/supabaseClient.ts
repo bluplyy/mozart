@@ -135,6 +135,7 @@ export async function createProduct(newProduct: Omit<Product, "id"> & { id?: str
     ...newProduct,
     id,
     images: newProduct.images || (newProduct.image_url ? [newProduct.image_url, ...(newProduct.secondary_image_url ? [newProduct.secondary_image_url] : [])] : []),
+    available_sizes: newProduct.available_sizes || ["XS", "S", "M", "L", "XL"],
     created_at: new Date().toISOString(),
   };
 

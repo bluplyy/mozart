@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
   const { products, loading } = useProducts();
   const { addToCart } = useCart();
 
-  const [selectedSize, setSelectedSize] = useState("48");
+  const [selectedSize, setSelectedSize] = useState("M");
   const [added, setAdded] = useState(false);
   const [activeTab, setActiveTab] = useState<"delivery" | "care" | "provenance">("delivery");
 
@@ -60,7 +60,7 @@ export default function ProductDetailPage() {
   }
 
   const handleAdd = () => {
-    addToCart(product, selectedSize);
+    addToCart(product, currentSize);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -71,7 +71,13 @@ export default function ProductDetailPage() {
     maximumFractionDigits: 0,
   }).format(product.price);
 
-  const SIZES = product.category === "Men" ? ["46", "48", "50", "52", "54"] : ["36", "38", "40", "42", "44"];
+  const SIZES = ["L", "XL", "M", "S", "XS"];
+  const availableSizesList = product.available_sizes || ["L", "XL", "M", "S", "XS"];
+
+  // Initialize selectedSize to first available size if current is not available
+  const currentSize = availableSizesList.includes(selectedSize) 
+    ? selectedSize 
+    : (availableSizesList[0] || "M");
 
   return (
     <div className="max-w-[1720px] mx-auto px-8 py-12">
@@ -161,27 +167,46 @@ export default function ProductDetailPage() {
           {/* Size Selector */}
           <div>
             <div className="flex items-center justify-between mb-3 text-[11px] uppercase tracking-[0.2em]">
-              <span className="font-semibold text-neutral-800">Select French Size</span>
+              <span className="font-semibold text-neutral-800">Select Size</span>
               <span className="text-neutral-400 text-[10px] underline cursor-pointer">
                 Size Guide
               </span>
             </div>
 
             <div className="grid grid-cols-5 gap-2.5">
-              {SIZES.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`py-3 text-[12px] uppercase font-medium tracking-wider border transition-all ${
-                    selectedSize === size
-                      ? "bg-black text-white border-black"
-                      : "bg-white border-neutral-300 text-neutral-800 hover:border-black"
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
+              {SIZES.map((size) => {
+                const isAvailable = availableSizesList.includes(size);
+                const isSelected = currentSize === size;
+
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    disabled={!isAvailable}
+                    onClick={() => setSelectedSize(size)}
+                    className={`py-3 text-[12px] uppercase font-semibold tracking-wider border transition-all relative ${
+                      !isAvailable
+                        ? "bg-neutral-100 text-neutral-300 border-neutral-200 cursor-not-allowed opacity-60"
+                        : isSelected
+                        ? "bg-black text-white border-black shadow-sm"
+                        : "bg-white border-neutral-300 text-neutral-800 hover:border-black"
+                    }`}
+                  >
+                    <span>{size}</span>
+                    {!isAvailable && (
+                      <span className="block text-[8px] font-normal tracking-widest text-neutral-400">
+                        OUT
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
+            {availableSizesList.length === 0 && (
+              <p className="text-[11px] text-amber-800 mt-2 font-light">
+                Saat ini semua ukuran untuk piece ini sedang habis.
+              </p>
+            )}
           </div>
 
           {/* Add to Shopping Bag Action */}

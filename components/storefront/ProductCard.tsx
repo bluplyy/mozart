@@ -2,26 +2,14 @@
 
 import Link from "next/link";
 import { Product } from "@/lib/types";
-import { useCart } from "@/context/CartContext";
 import { useState } from "react";
-import { Plus, Check } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart();
-  const [added, setAdded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  const handleQuickAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(product, "M");
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1800);
-  };
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -73,26 +61,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           <span className="bg-white/90 backdrop-blur-sm text-[#09090b] text-[9px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1">
             {product.category}
           </span>
-        </div>
-
-        {/* Quick Add overlay button on hover */}
-        <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-          <button
-            onClick={handleQuickAdd}
-            className="w-full bg-[#09090b] hover:bg-black text-white text-[10px] tracking-[0.25em] uppercase font-medium py-3 px-4 flex items-center justify-center space-x-2 shadow-lg transition-colors"
-          >
-            {added ? (
-              <>
-                <Check size={13} />
-                <span>Added To Bag</span>
-              </>
-            ) : (
-              <>
-                <Plus size={13} />
-                <span>Quick Add • Size M</span>
-              </>
-            )}
-          </button>
         </div>
       </Link>
 

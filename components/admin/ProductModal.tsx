@@ -22,6 +22,7 @@ export default function ProductModal({
   const [category, setCategory] = useState<Category>("Men");
   const [price, setPrice] = useState<string>("1500");
   const [images, setImages] = useState<string[]>([]);
+  const [availableSizes, setAvailableSizes] = useState<string[]>(["XS", "S", "M", "L", "XL"]);
   const [description, setDescription] = useState("");
   const [details, setDetails] = useState("");
   const [saving, setSaving] = useState(false);
@@ -33,6 +34,13 @@ export default function ProductModal({
       setCategory(initialData.category);
       setPrice(initialData.price.toString());
       
+      // Populate sizes
+      if (initialData.available_sizes && initialData.available_sizes.length > 0) {
+        setAvailableSizes(initialData.available_sizes);
+      } else {
+        setAvailableSizes(["XS", "S", "M", "L", "XL"]);
+      }
+
       // Populate images array from initialData
       if (initialData.images && initialData.images.length > 0) {
         setImages(initialData.images);
@@ -49,6 +57,7 @@ export default function ProductModal({
       setTitle("");
       setCategory("Men");
       setPrice("2200");
+      setAvailableSizes(["XS", "S", "M", "L", "XL"]);
       setImages([
         "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
       ]);
@@ -68,6 +77,10 @@ export default function ProductModal({
     }
     if (images.length === 0) {
       setError("Minimal satu foto produk harus diupload.");
+      return;
+    }
+    if (availableSizes.length === 0) {
+      setError("Minimal satu ukuran (size) harus dipilih tersedia.");
       return;
     }
     const numPrice = parseFloat(price);
@@ -90,6 +103,7 @@ export default function ProductModal({
         image_url: primaryImage,
         secondary_image_url: secondaryImage,
         images: images,
+        available_sizes: availableSizes,
         description: description.trim(),
         details: details.trim() || undefined,
       });
@@ -198,6 +212,54 @@ export default function ProductModal({
               onChange={setImages}
               disabled={saving}
             />
+          </div>
+
+          {/* Size Availability Selector: L, XL, M, S, XS */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[11px] uppercase tracking-[0.2em] text-neutral-700 font-semibold">
+                Ketersediaan Ukuran (Size Availability) *
+              </label>
+              <span className="text-[10px] uppercase tracking-wider text-neutral-400">
+                Klik untuk aktifkan / nonaktifkan size
+              </span>
+            </div>
+            <div className="grid grid-cols-5 gap-2.5">
+              {(["XS", "S", "M", "L", "XL"] as const).map((size) => {
+                const isSelected = availableSizes.includes(size);
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => {
+                      if (isSelected) {
+                        setAvailableSizes(availableSizes.filter((s) => s !== size));
+                      } else {
+                        // Keep order in standard sequence: XS, S, M, L, XL
+                        const all = ["XS", "S", "M", "L", "XL"];
+                        const next = [...availableSizes, size].sort(
+                          (a, b) => all.indexOf(a) - all.indexOf(b)
+                        );
+                        setAvailableSizes(next);
+                      }
+                    }}
+                    className={`py-3 text-[12px] uppercase font-semibold tracking-wider border transition-all flex flex-col items-center justify-center gap-0.5 ${
+                      isSelected
+                        ? "bg-black text-white border-black shadow-sm"
+                        : "bg-neutral-100/70 border-neutral-300 text-neutral-400 hover:border-black hover:text-black"
+                    }`}
+                  >
+                    <span>{size}</span>
+                    <span className="text-[9px] tracking-widest font-normal opacity-80">
+                      {isSelected ? "TERSEDIA" : "HABIS"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-neutral-500 mt-2">
+              Ukuran yang ditandai <span className="font-semibold text-black">TERSEDIA</span> akan dapat dipilih dan dibeli oleh pelanggan di halaman produk.
+            </p>
           </div>
 
           {/* Fabric & Provenance Details */}

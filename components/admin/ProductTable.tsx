@@ -114,12 +114,29 @@ export default function ProductTable({
                     </div>
                   </td>
 
-                  {/* Title & Description */}
+                  {/* Title, Sizes & Description */}
                   <td className="py-3 px-6 max-w-xs">
                     <span className="font-medium text-neutral-900 tracking-wide block uppercase text-[12px]">
                       {p.title}
                     </span>
-                    <p className="text-neutral-500 text-[11px] line-clamp-2 mt-0.5 font-light leading-relaxed">
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {(["XS", "S", "M", "L", "XL"] as const).map((size) => {
+                        const isAvailable = (p.available_sizes || ["XS", "S", "M", "L", "XL"]).includes(size);
+                        return (
+                          <span
+                            key={size}
+                            className={`text-[9px] font-mono px-1.5 py-0.2 border ${
+                              isAvailable
+                                ? "bg-black text-white border-black font-semibold"
+                                : "bg-neutral-100 text-neutral-300 border-neutral-200 line-through"
+                            }`}
+                          >
+                            {size}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    <p className="text-neutral-500 text-[11px] line-clamp-2 mt-1 font-light leading-relaxed">
                       {p.description}
                     </p>
                   </td>

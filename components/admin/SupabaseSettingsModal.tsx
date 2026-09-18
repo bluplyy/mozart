@@ -18,6 +18,7 @@ create table if not exists products (
   image_url text not null,
   secondary_image_url text,
   images text[] default array[]::text[],
+  available_sizes text[] default array['XS', 'S', 'M', 'L', 'XL']::text[],
   description text not null,
   details text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
