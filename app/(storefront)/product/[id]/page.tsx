@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
         */}
         <aside
           aria-label="Product Information"
-          className="product-information w-full lg:w-[42%] xl:w-[40%] lg:sticky lg:top-[var(--header-height,111px)] lg:h-[calc(100dvh-var(--header-height,111px))] lg:overflow-y-auto lg:overscroll-contain luxury-scrollbar space-y-8 lg:py-2 lg:pr-3"
+          className="product-information w-full lg:w-[42%] xl:w-[40%] space-y-8 lg:py-2 lg:pr-3"
         >
           {/* Header & Title with Wishlist Icon */}
           <div>
