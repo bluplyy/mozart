@@ -3,7 +3,7 @@ import { Product } from "./types";
 import { INITIAL_PRODUCTS } from "./initial-products";
 
 const DEFAULT_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kafchlvjbbauchwuehyt.supabase.co";
-const DEFAULT_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const DEFAULT_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_UHYTDNAXio72kHONE0KUKw_9R_O-pWK";
 
 // Cache local products for fallback
 const LOCAL_STORAGE_KEY = "mozart_local_products_v1";
@@ -47,13 +47,27 @@ function getLocalFallback(): Product[] {
       // ignore
     }
   }
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
+  } catch (e) {
+    // ignore quota errors
+  }
   return INITIAL_PRODUCTS;
 }
 
 function saveLocalFallback(products: Product[]) {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+  if (typeof window === "undefined") return;
+  try {
+    // Sanitize any huge base64 strings so localStorage quota is never exceeded
+    const safeProducts = products.map((p) => ({
+      ...p,
+      image_url: p.image_url?.startsWith("data:") ? "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop" : p.image_url,
+      secondary_image_url: p.secondary_image_url?.startsWith("data:") ? undefined : p.secondary_image_url,
+      images: p.images ? p.images.map((img) => img.startsWith("data:") ? "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop" : img) : undefined,
+    }));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(safeProducts));
+  } catch (e) {
+    console.warn("localStorage quota exceeded or write failed, skipping local storage sync:", e);
   }
 }
 

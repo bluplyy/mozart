@@ -25,26 +25,6 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
         </div>
 
-        {/* Hero Navigation */}
-        <div className="relative h-full max-w-[1720px] mx-auto px-8 flex flex-col justify-end pb-20 text-white">
-          <div className="flex items-center space-x-6">
-            <Link
-              href="/men"
-              className="bg-white text-black hover:bg-neutral-200 text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-colors"
-            >
-              <span>Discover Men</span>
-              <ArrowRight size={14} />
-            </Link>
-
-            <Link
-              href="/women"
-              className="border border-white/70 hover:border-white text-white hover:bg-white hover:text-black text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-9 flex items-center space-x-3 transition-all"
-            >
-              <span>Discover Women</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* 2. THE TWO UNIVERSES: DUAL SPLIT PORTAL */}
@@ -170,34 +150,9 @@ export default function HomePage() {
           <blockquote className="font-serif text-3xl md:text-5xl lg:text-5xl tracking-[0.08em] uppercase font-normal leading-[1.3] max-w-4xl mx-auto mb-12">
             "A garment is not merely attire. It is personal architecture—a geometry of presence constructed to defy ephemerality."
           </blockquote>
-          <span className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 block mb-20">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 block">
             — Atelier Mozart, Place Vendôme, Paris
           </span>
-
-          {/* Three Craft Pillars */}
-          <div className="grid grid-cols-3 gap-12 text-left border-t border-neutral-800 pt-16">
-            <div>
-              <span className="text-[11px] font-mono text-neutral-500 block mb-3">01 / PROVENANCE</span>
-              <h4 className="font-serif text-xl tracking-wider uppercase mb-2">Heritage Italian Mills</h4>
-              <p className="text-[12px] text-neutral-400 leading-relaxed font-light">
-                Each textile is spun from 100% natural fibers sourced exclusively from historic family-owned mills in Biella and Lyon.
-              </p>
-            </div>
-            <div>
-              <span className="text-[11px] font-mono text-neutral-500 block mb-3">02 / STRUCTURE</span>
-              <h4 className="font-serif text-xl tracking-wider uppercase mb-2">Internal Floating Canvas</h4>
-              <p className="text-[12px] text-neutral-400 leading-relaxed font-light">
-                All outerwear features traditional horsehair floating canvas construction, allowing the garment to mold uniquely to its wearer over decades.
-              </p>
-            </div>
-            <div>
-              <span className="text-[11px] font-mono text-neutral-500 block mb-3">03 / RARITY</span>
-              <h4 className="font-serif text-xl tracking-wider uppercase mb-2">Numbered Archive</h4>
-              <p className="text-[12px] text-neutral-400 leading-relaxed font-light">
-                Creations are produced in strictly limited editions, hand-inscribed with provenance certificates in our Parisian salon.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
     </div>
