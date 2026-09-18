@@ -12,8 +12,6 @@ import {
   Truck,
   Plus,
   Minus,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 
 export default function ProductDetailPage() {
@@ -23,7 +21,6 @@ export default function ProductDetailPage() {
   const { products, loading } = useProducts();
   const { addToCart } = useCart();
 
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("M");
   const [added, setAdded] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
@@ -87,13 +84,6 @@ export default function ProductDetailPage() {
     ? selectedSize 
     : (availableSizesList[0] || "M");
 
-  const galleryImages =
-    product.images && product.images.length > 0
-      ? product.images
-      : [product.image_url, ...(product.secondary_image_url ? [product.secondary_image_url] : [])].filter(Boolean);
-
-  const safeImageIndex = activeImageIndex < galleryImages.length ? activeImageIndex : 0;
-
   return (
     <div className="max-w-[1720px] mx-auto px-8 py-12">
       {/* Breadcrumb row */}
@@ -120,86 +110,32 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Asymmetrical 2-Column Luxury Layout */}
-      <div className="grid grid-cols-12 gap-8 lg:gap-16 items-start">
-        {/* Left Column: Contained Editorial Gallery & Interactive Showcase (7 cols) */}
-        <div className="col-span-12 lg:col-span-7 space-y-4">
-          {/* Main Showcase Image */}
-          <div className="bg-[#edeae4] overflow-hidden aspect-[3/4] max-h-[76vh] w-full shadow-sm relative group flex items-center justify-center">
-            <img
-              src={galleryImages[safeImageIndex] || product.image_url}
-              alt={`${product.title} view ${safeImageIndex + 1}`}
-              className="w-full h-full object-cover object-center transition-all duration-300 ease-out"
-            />
+      <div className="grid grid-cols-12 gap-16 items-start">
+        {/* Left Column: High-Res Editorial Gallery (7 cols) */}
+        <div className="col-span-7 space-y-8">
+          {(() => {
+            const galleryImages =
+              product.images && product.images.length > 0
+                ? product.images
+                : [product.image_url, ...(product.secondary_image_url ? [product.secondary_image_url] : [])].filter(Boolean);
 
-            {/* Look Tag Badge */}
-            <span className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[9px] tracking-[0.2em] uppercase px-3 py-1 font-mono">
-              LOOK 0{safeImageIndex + 1} / 0{galleryImages.length}
-            </span>
-
-            {/* Previous / Next Chevrons */}
-            {galleryImages.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setActiveImageIndex((prev) =>
-                      prev === 0 ? galleryImages.length - 1 : prev - 1
-                    )
-                  }
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-black flex items-center justify-center shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer"
-                  aria-label="Previous Look"
-                >
-                  <ChevronLeft size={20} strokeWidth={1.5} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setActiveImageIndex((prev) =>
-                      prev === galleryImages.length - 1 ? 0 : prev + 1
-                    )
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-black flex items-center justify-center shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer"
-                  aria-label="Next Look"
-                >
-                  <ChevronRight size={20} strokeWidth={1.5} />
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Thumbnail Strip for Multi-View Looks */}
-          {galleryImages.length > 1 && (
-            <div className="flex items-center space-x-3 overflow-x-auto pb-2 pt-1 luxury-scroll">
-              {galleryImages.map((imgSrc, idx) => {
-                const isActive = safeImageIndex === idx;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-20 aspect-[3/4] bg-[#edeae4] overflow-hidden shrink-0 border transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? "border-black ring-1 ring-black opacity-100 scale-105"
-                        : "border-transparent opacity-60 hover:opacity-100"
-                    }`}
-                  >
-                    <img
-                      src={imgSrc}
-                      alt={`Thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover object-center"
-                    />
-                    <span className="absolute bottom-1 right-1 bg-black/75 text-white text-[7px] font-mono px-1 py-0.5">
-                      0{idx + 1}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+            return galleryImages.map((imgSrc, index) => (
+              <div key={index} className="bg-[#edeae4] overflow-hidden aspect-[3/4] shadow-sm relative group">
+                <img
+                  src={imgSrc}
+                  alt={`${product.title} view ${index + 1}`}
+                  className="w-full h-full object-cover object-center"
+                />
+                <span className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[9px] tracking-[0.2em] uppercase px-2.5 py-1 font-mono">
+                  LOOK 0{index + 1}
+                </span>
+              </div>
+            ));
+          })()}
         </div>
 
-        {/* Right Column: Sticky & Independently Scrollable Purchasing Details (5 cols) */}
-        <div className="col-span-12 lg:col-span-5 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto overscroll-contain luxury-scroll pr-3 pl-0 lg:pl-4 space-y-6">
+        {/* Right Column: Sticky Purchasing Details (5 cols) */}
+        <div className="col-span-5 sticky top-28 space-y-8 pl-4">
           <div>
             <div className="flex items-center space-x-3 mb-2">
               <span className="bg-black text-white text-[9px] tracking-[0.25em] uppercase font-semibold px-2.5 py-1">
