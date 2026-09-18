@@ -1,57 +1,12 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail("");
-    }
-  };
-
   return (
-    <footer className="bg-[#09090b] text-[#fafaf8] pt-24 pb-12 border-t border-neutral-900">
+    <footer className="bg-[#09090b] text-[#fafaf8] pt-16 pb-12 border-t border-neutral-900">
       <div className="max-w-[1720px] mx-auto px-8">
-        {/* Top Newsletter & Manifesto Row */}
-        <div className="grid grid-cols-12 gap-12 pb-20 border-b border-neutral-800">
-          <div className="col-span-6 pr-12">
-            <h3 className="font-serif text-3xl tracking-[0.2em] uppercase text-white font-normal mb-4">
-              Enter The Mozart Studio
-            </h3>
-            <p className="text-neutral-400 text-[13px] leading-relaxed max-w-md font-light mb-8">
-              Subscribe to receive private studio invitations, preview seasonal lookbooks, and access bespoke high fashion appointments.
-            </p>
-            {subscribed ? (
-              <div className="text-[12px] uppercase tracking-[0.2em] text-neutral-300 py-3 border-b border-neutral-700">
-                ✓ Welcome to the Mozart Gazette. Your invitation is pending.
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex max-w-md border-b border-neutral-600 focus-within:border-white transition-colors">
-                <input
-                  type="email"
-                  placeholder="YOUR EMAIL ADDRESS"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="bg-transparent text-[11px] tracking-[0.2em] uppercase text-white placeholder:text-neutral-500 py-3 flex-1 outline-none"
-                />
-                <button
-                  type="submit"
-                  className="text-[11px] tracking-[0.25em] uppercase text-white hover:text-neutral-300 py-3 font-medium transition-colors"
-                >
-                  Join
-                </button>
-              </form>
-            )}
-          </div>
-
-          <div className="col-span-2">
+        {/* Navigation & Information Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 pb-16 border-b border-neutral-800">
+          <div>
             <h4 className="text-[11px] tracking-[0.25em] uppercase text-neutral-400 font-semibold mb-6">
               Collections
             </h4>
@@ -74,7 +29,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="col-span-2">
+          <div>
             <h4 className="text-[11px] tracking-[0.25em] uppercase text-neutral-400 font-semibold mb-6">
               Client Care
             </h4>
@@ -102,7 +57,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="col-span-2">
+          <div>
             <h4 className="text-[11px] tracking-[0.25em] uppercase text-neutral-400 font-semibold mb-6">
               Boutiques
             </h4>
@@ -124,7 +79,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom copyright bar */}
-        <div className="pt-10 flex items-center justify-between text-[11px] tracking-[0.2em] uppercase text-neutral-500">
+        <div className="pt-10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] tracking-[0.2em] uppercase text-neutral-500">
           <div className="font-serif tracking-[0.35em] text-neutral-300 text-lg">
             MOZART
           </div>
