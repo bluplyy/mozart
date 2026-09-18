@@ -88,9 +88,11 @@ export async function POST(req: Request) {
                           <div style="text-align: center; margin-bottom: 36px;">
                             <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
                               <tr>
-                                <td align="center" bgcolor="#09090b" style="background-color: #09090b; border: 1px solid #09090b;">
-                                  <a class="cta-button" href="${confirmLink}" target="_blank" rel="noopener noreferrer" style="font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: #fafaf8; text-decoration: none; padding: 18px 40px; display: inline-block;">
-                                    Confirm Account &amp; Activate &rarr;
+                                <td align="center" bgcolor="#09090b" style="background-color: #09090b; border: 1px solid #09090b; color: #ffffff !important;">
+                                  <a class="cta-button" href="${confirmLink}" target="_blank" rel="noopener noreferrer" style="font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: #ffffff !important; text-decoration: none !important; padding: 18px 40px; display: inline-block;">
+                                    <span style="color: #ffffff !important; text-decoration: none !important; font-weight: 600;">
+                                      Confirm Account &amp; Activate &rarr;
+                                    </span>
                                   </a>
                                 </td>
                               </tr>
