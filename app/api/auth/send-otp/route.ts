@@ -3,53 +3,66 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
-    const { email, name, code } = await req.json();
+    const { email, name, code, token, confirmationUrl: customConfirmationUrl } = await req.json();
 
-    if (!email || !code) {
+    if (!email) {
       return NextResponse.json(
-        { error: "Email and verification code are required." },
+        { error: "Email address is required." },
         { status: 400 }
       );
     }
 
     const recipientName = name || "Valued Patron";
 
-    // Luxury HTML template for the email
+    // Determine base URL from headers or fallback
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";
+    const protocol = req.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
+    // Compute activation link
+    const confirmToken = token || code || "verify";
+    const confirmLink = customConfirmationUrl || `${baseUrl}/confirm?token=${encodeURIComponent(confirmToken)}&email=${encodeURIComponent(email)}`;
+
+    // Luxury HTML template for email confirmation
     const htmlTemplate = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #fafaf8; padding: 40px 20px; color: #09090b;">
-        <div style="max-width: 540px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e5e5; padding: 40px;">
-          <div style="text-align: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 24px; margin-bottom: 30px;">
+        <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e5e5; padding: 44px 36px;">
+          <div style="text-align: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 24px; margin-bottom: 32px;">
             <span style="font-size: 24px; font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase; color: #09090b; display: block;">
               M O Z A R T
             </span>
             <span style="font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #71717a; margin-top: 4px; display: block;">
-              High Fashion • Paris
+              Haute Couture • Paris
             </span>
           </div>
 
-          <h2 style="font-size: 16px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #09090b; margin-bottom: 16px;">
-            Studio Account Verification
+          <h2 style="font-size: 16px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #09090b; margin-bottom: 18px; text-align: center;">
+            Confirm Your Client Profile
           </h2>
 
-          <p style="font-size: 13px; line-height: 1.6; color: #52525b; margin-bottom: 24px;">
+          <p style="font-size: 13px; line-height: 1.7; color: #52525b; margin-bottom: 28px;">
             Dear ${recipientName},<br/><br/>
-            Thank you for requesting entry to the Mozart Private Studio. To authenticate your client profile and finalize your membership, please enter the following 6-digit confidential code:
+            Thank you for requesting entry to the Mozart Private Studio. To confirm your account and finalize your membership privilege, please confirm your email address by clicking the button below:
           </p>
 
-          <div style="text-align: center; background-color: #09090b; padding: 24px; margin: 28px 0;">
-            <span style="font-family: monospace; font-size: 32px; font-weight: 700; letter-spacing: 0.35em; color: #fafaf8; display: inline-block;">
-              ${code}
-            </span>
-            <span style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #a1a1aa; margin-top: 8px;">
-              Valid for 10 minutes
-            </span>
+          <div style="text-align: center; margin: 36px 0;">
+            <a href="${confirmLink}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #09090b; color: #fafaf8; padding: 18px 36px; font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; border: 1px solid #09090b;">
+              Confirm Account &amp; Activate &rarr;
+            </a>
           </div>
 
-          <p style="font-size: 12px; line-height: 1.6; color: #71717a; margin-bottom: 28px;">
-            If you did not initiate this request, please disregard this transmission. Never share this code with anyone; our concierge will never solicit your verification code.
+          <p style="font-size: 11px; line-height: 1.6; color: #71717a; margin-bottom: 24px; text-align: center;">
+            If the button above does not work, copy and paste this link into your browser:<br/>
+            <a href="${confirmLink}" style="color: #09090b; word-break: break-all; text-decoration: underline;">
+              ${confirmLink}
+            </a>
           </p>
 
-          <div style="border-top: 1px solid #f0f0f0; padding-top: 20px; text-align: center; font-size: 10px; color: #a1a1aa; letter-spacing: 0.15em; text-transform: uppercase;">
+          <p style="font-size: 11px; line-height: 1.6; color: #a1a1aa; margin-top: 28px; border-top: 1px solid #f4f4f5; pt-4; text-align: center;">
+            This confirmation link will remain valid for 24 hours. If you did not create a Mozart account, please disregard this transmission.
+          </p>
+
+          <div style="border-top: 1px solid #f0f0f0; padding-top: 24px; margin-top: 24px; text-align: center; font-size: 10px; color: #a1a1aa; letter-spacing: 0.15em; text-transform: uppercase;">
             12 Vendome Square, 75001 Paris, France<br/>
             © ${new Date().getFullYear()} MOZART STUDIO. ALL RIGHTS RESERVED.
           </div>
@@ -77,8 +90,8 @@ export async function POST(req: Request) {
         await transporter.sendMail({
           from: `"Mozart Studio Paris" <${gmailUser}>`,
           to: email,
-          subject: `${code} is your Mozart Studio Verification Code`,
-          text: `Dear ${recipientName}, your confidential Mozart verification code is: ${code}. Valid for 10 minutes.`,
+          subject: `Confirm Your Mozart Private Studio Membership`,
+          text: `Dear ${recipientName}, please confirm your Mozart Private Studio account by visiting this link: ${confirmLink}`,
           html: htmlTemplate,
         });
 
@@ -94,14 +107,17 @@ export async function POST(req: Request) {
       realEmailSent,
       smtpConfigured: !!(gmailUser && gmailAppPassword),
       smtpError,
+      confirmationUrl: confirmLink,
       message: realEmailSent
-        ? "Real email dispatched via Gmail SMTP."
-        : "Email generated. Check your Gmail inbox or use the local Webmail client.",
+        ? "Confirmation email dispatched via Gmail SMTP."
+        : "Confirmation email generated. Check your email or use the Webmail client.",
       emailData: {
         to: email,
         recipientName,
-        subject: `${code} is your Mozart Studio Verification Code`,
-        code,
+        subject: `Confirm Your Mozart Private Studio Membership`,
+        code: code || confirmToken,
+        token: confirmToken,
+        confirmationUrl: confirmLink,
         sentAt: new Date().toISOString(),
         htmlContent: htmlTemplate,
       },

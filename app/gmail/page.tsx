@@ -48,7 +48,7 @@ export default function GmailSimulatorPage() {
     (e) =>
       e.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       e.to.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.code.includes(searchQuery)
+      (e.code ? e.code.includes(searchQuery) : false)
   );
 
   return (
@@ -211,15 +211,26 @@ export default function GmailSimulatorPage() {
                   </div>
                 </div>
 
-                {/* Quick Copy Verification Code Button */}
+                {/* Quick Action Button */}
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => handleCopyCode(selectedEmail.code)}
-                    className="bg-black hover:bg-neutral-800 text-white text-[11px] tracking-wider uppercase font-semibold py-2 px-4 rounded-md flex items-center space-x-2 shadow-sm transition-colors"
-                  >
-                    {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                    <span>{copied ? "Copied!" : `Copy Code (${selectedEmail.code})`}</span>
-                  </button>
+                  {selectedEmail.confirmationUrl ? (
+                    <a
+                      href={selectedEmail.confirmationUrl}
+                      target="_blank"
+                      className="bg-black hover:bg-neutral-800 text-white text-[11px] tracking-wider uppercase font-semibold py-2 px-4 rounded-md flex items-center space-x-2 shadow-sm transition-colors"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Confirm Account & Activate</span>
+                    </a>
+                  ) : selectedEmail.code ? (
+                    <button
+                      onClick={() => handleCopyCode(selectedEmail.code!)}
+                      className="bg-black hover:bg-neutral-800 text-white text-[11px] tracking-wider uppercase font-semibold py-2 px-4 rounded-md flex items-center space-x-2 shadow-sm transition-colors"
+                    >
+                      {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                      <span>{copied ? "Copied!" : `Copy Code (${selectedEmail.code})`}</span>
+                    </button>
+                  ) : null}
                 </div>
               </div>
 
@@ -232,11 +243,11 @@ export default function GmailSimulatorPage() {
               {/* Action back to Mozart */}
               <div className="mt-8 pt-6 border-t border-neutral-200 flex items-center justify-between text-[12px]">
                 <Link
-                  href="/signup"
+                  href="/"
                   className="text-blue-600 hover:underline flex items-center space-x-1"
                 >
                   <ArrowLeft size={14} />
-                  <span>Return to Mozart Signup to Enter Code</span>
+                  <span>Return to Mozart Home</span>
                 </Link>
 
                 <span className="text-neutral-400 font-mono text-[11px]">

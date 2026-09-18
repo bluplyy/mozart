@@ -4,14 +4,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import OtpInput from "@/components/ui/OtpInput";
 import {
   ArrowRight,
   Lock,
   Mail,
   User,
-  ShieldCheck,
-  Sparkles,
   RotateCcw,
   ArrowLeft,
   CheckCircle2,
@@ -21,7 +18,6 @@ import {
 export default function CustomerSignUpPage() {
   const {
     initiateSignUpWithOtp,
-    verifySignUpOtp,
     resendSignUpOtp,
     isAuthenticated,
   } = useAuth();
@@ -36,9 +32,7 @@ export default function CustomerSignUpPage() {
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
 
-  // OTP state
-  const [otpCode, setOtpCode] = useState("");
-  const [dispatchedOtp, setDispatchedOtp] = useState<string | null>(null);
+  // Verification state
   const [countdown, setCountdown] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
@@ -46,10 +40,12 @@ export default function CustomerSignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [resendSuccess, setResendSuccess] = useState(false);
 
-  if (isAuthenticated) {
-    router.push("/account");
-    return null;
-  }
+  // If authenticated (e.g. user clicked confirmation link in another tab), redirect to account
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/account");
+    }
+  }, [isAuthenticated, router]);
 
   // Countdown timer for resend
   useEffect(() => {
@@ -64,6 +60,22 @@ export default function CustomerSignUpPage() {
     return () => clearInterval(timer);
   }, [step, countdown]);
 
+  // Poll for background confirmation while waiting on verify screen
+  useEffect(() => {
+    if (step !== "verify") return;
+
+    const interval = setInterval(() => {
+      if (typeof window !== "undefined") {
+        const session = localStorage.getItem("mozart_auth_session_v1");
+        if (session) {
+          router.push("/account");
+        }
+      }
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [step, router]);
+
   // Step 1: Submit Registration Form
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +89,6 @@ export default function CustomerSignUpPage() {
     try {
       const res = await initiateSignUpWithOtp(name, email, password, "customer");
       if (res.success) {
-        setDispatchedOtp(res.otp || null);
         setStep("verify");
         setCountdown(60);
         setCanResend(false);
@@ -89,30 +100,7 @@ export default function CustomerSignUpPage() {
     }
   };
 
-  // Step 2: Verify OTP
-  const handleVerifySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (otpCode.length !== 6) {
-      setError("Please enter all 6 digits of the verification code.");
-      return;
-    }
-
-    setError(null);
-    setLoading(true);
-
-    try {
-      const res = await verifySignUpOtp(email, otpCode);
-      if (res.success) {
-        router.push("/account");
-      } else {
-        setError(res.error || "Invalid verification code.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Resend OTP
+  // Resend Confirmation Email
   const handleResend = async () => {
     if (!canResend) return;
     setError(null);
@@ -120,13 +108,12 @@ export default function CustomerSignUpPage() {
     try {
       const res = await resendSignUpOtp(email);
       if (res.success) {
-        setDispatchedOtp(res.otp || null);
         setCountdown(60);
         setCanResend(false);
         setResendSuccess(true);
         setTimeout(() => setResendSuccess(false), 3000);
       } else {
-        setError(res.error || "Failed to resend verification code.");
+        setError(res.error || "Failed to resend confirmation email.");
       }
     } finally {
       setLoading(false);
@@ -217,7 +204,7 @@ export default function CustomerSignUpPage() {
                   className="mt-1 h-4 w-4 rounded-none border-neutral-400 text-black focus:ring-0 cursor-pointer"
                 />
                 <label htmlFor="terms" className="text-[11px] text-neutral-600 leading-relaxed cursor-pointer font-light">
-                  I agree to the <span className="underline">Mozart Studio Terms</span> and acknowledge that a 6-digit confirmation code will be dispatched to my email.
+                  I agree to the <span className="underline">Mozart Studio Terms</span> and request an account confirmation link sent to my email.
                 </label>
               </div>
 
@@ -227,7 +214,7 @@ export default function CustomerSignUpPage() {
                 disabled={loading}
                 className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
               >
-                <span>{loading ? "Generating Verification Code..." : "Continue To Verification"}</span>
+                <span>{loading ? "Dispatching Activation Link..." : "Create Client Profile"}</span>
                 <ArrowRight size={14} />
               </button>
             </form>
@@ -243,7 +230,7 @@ export default function CustomerSignUpPage() {
             </div>
           </div>
         ) : (
-          /* STEP 2: 6-DIGIT EMAIL CODE VERIFICATION */
+          /* STEP 2: CONFIRM ACCOUNT VIA EMAIL */
           <div className="animate-fadeIn">
             <button
               onClick={() => {
@@ -256,22 +243,25 @@ export default function CustomerSignUpPage() {
               <span>Back to Edit Profile</span>
             </button>
 
-            <div className="mb-8 text-center">
-              <div className="w-12 h-12 rounded-full bg-neutral-900 text-white flex items-center justify-center mx-auto mb-4">
-                <Mail size={20} strokeWidth={1.5} />
+            <div className="mb-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-[#09090b] text-white flex items-center justify-center mx-auto mb-4 shadow-md">
+                <Mail size={24} strokeWidth={1.5} />
               </div>
               <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 font-semibold block mb-2 font-mono">
-                Email Authentication Required
+                EMAIL CONFIRMATION REQUIRED
               </span>
               <h1 className="font-serif text-3xl sm:text-4xl tracking-[0.1em] uppercase text-neutral-900 font-normal">
-                Enter Verification Code
+                Check Your Email
               </h1>
               <p className="text-[12px] text-neutral-600 font-light tracking-wide mt-2">
-                We have dispatched a 6-digit confidential code to:
+                We have dispatched a private account confirmation link to:
               </p>
-              <span className="text-[13px] font-mono font-medium text-neutral-900 block mt-1">
+              <span className="text-[14px] font-mono font-semibold text-neutral-900 block mt-1">
                 {email}
               </span>
+              <p className="text-[12px] text-neutral-500 font-light mt-3 leading-relaxed">
+                Please open your email application and click the <strong>Confirm Account</strong> button to activate your profile.
+              </p>
             </div>
 
             {error && (
@@ -283,78 +273,41 @@ export default function CustomerSignUpPage() {
             {resendSuccess && (
               <div className="mb-6 p-3 bg-emerald-50 border-l-2 border-emerald-600 text-[12px] text-emerald-900 flex items-center space-x-2">
                 <CheckCircle2 size={15} className="text-emerald-600" />
-                <span>A new verification code has been dispatched.</span>
+                <span>A new confirmation link has been dispatched to your email.</span>
               </div>
             )}
 
-            <form onSubmit={handleVerifySubmit} className="space-y-8">
-              {/* 6-Digit Box Input Component */}
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.25em] text-neutral-500 font-semibold mb-3 text-center">
-                  Enter 6-Digit Studio Code
-                </label>
-                <OtpInput
-                  value={otpCode}
-                  onChange={setOtpCode}
-                  disabled={loading}
-                />
-              </div>
-
-              {/* Instructions to check email app like Gmail */}
-              <div className="p-5 bg-white border border-neutral-200 shadow-sm space-y-4">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-9 h-9 rounded-full bg-red-50 text-red-600 flex items-center justify-center shrink-0 mt-0.5 border border-red-100">
-                    <Mail size={17} />
-                  </div>
-                  <div className="text-[12px] text-neutral-600 leading-relaxed font-light">
-                    <p className="font-semibold text-neutral-900 uppercase tracking-wider text-[11px] mb-1">
-                      Check Your Gmail or Email Application
-                    </p>
-                    <p>
-                      Your 6-digit confidential studio verification code has been dispatched to{" "}
-                      <strong className="font-mono text-neutral-900 font-semibold">{email}</strong>.
-                      Please open your email application to retrieve your code.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Quick Action Buttons to Open Gmail or Webmail Client */}
-                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-neutral-100">
-                  <a
-                    href="https://mail.google.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border border-neutral-300 hover:border-black text-neutral-800 text-[10px] tracking-[0.15em] uppercase font-semibold py-3 px-3 flex items-center justify-center space-x-1.5 transition-colors bg-neutral-50 hover:bg-white"
-                  >
-                    <span>Open Real Gmail</span>
-                    <ExternalLink size={12} />
-                  </a>
-
-                  <Link
-                    href="/gmail"
-                    target="_blank"
-                    className="bg-[#09090b] hover:bg-black text-white text-[10px] tracking-[0.15em] uppercase font-semibold py-3 px-3 flex items-center justify-center space-x-1.5 transition-colors"
-                  >
-                    <span>Open Webmail Inbox</span>
-                    <ExternalLink size={12} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Submit Verification */}
-              <button
-                type="submit"
-                disabled={loading || otpCode.length !== 6}
-                className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 flex items-center justify-center space-x-2 transition-colors disabled:opacity-40"
+            {/* Quick Action Buttons to Open Gmail or Webmail Client */}
+            <div className="space-y-3 pt-2">
+              <a
+                href="https://mail.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#09090b] hover:bg-black text-white text-[11px] tracking-[0.25em] uppercase font-semibold py-4 px-4 flex items-center justify-center space-x-2 transition-colors shadow-sm"
               >
-                <span>{loading ? "Verifying Code..." : "Complete Patron Verification"}</span>
-                <ArrowRight size={14} />
-              </button>
-            </form>
+                <span>Open Gmail</span>
+                <ExternalLink size={13} />
+              </a>
 
-            {/* Resend Code Section */}
-            <div className="mt-8 pt-6 border-t border-black/[0.06] text-center text-[12px] text-neutral-500">
-              Didn't receive the email dispatch?{" "}
+              <Link
+                href="/gmail"
+                target="_blank"
+                className="w-full border border-neutral-300 hover:border-black text-neutral-800 text-[10px] tracking-[0.2em] uppercase font-semibold py-3 px-4 flex items-center justify-center space-x-2 transition-colors bg-neutral-50 hover:bg-white"
+              >
+                <span>Open Webmail Inbox</span>
+                <ExternalLink size={12} />
+              </Link>
+            </div>
+
+            {/* Real-time waiting status */}
+            <div className="mt-8 pt-6 border-t border-black/[0.06] flex items-center justify-center space-x-2 text-[11px] text-neutral-500 font-mono">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              <span>Waiting for email confirmation...</span>
+            </div>
+
+            {/* Resend Confirmation Link Section */}
+            <div className="mt-4 text-center text-[12px] text-neutral-500">
+              Didn't receive the email?{" "}
               {canResend ? (
                 <button
                   type="button"
@@ -363,7 +316,7 @@ export default function CustomerSignUpPage() {
                   className="text-neutral-900 font-semibold uppercase tracking-wider underline underline-offset-4 hover:text-neutral-600 ml-1 inline-flex items-center gap-1"
                 >
                   <RotateCcw size={12} />
-                  <span>Resend Code</span>
+                  <span>Resend Confirmation Link</span>
                 </button>
               ) : (
                 <span className="text-neutral-400 font-mono text-[11px] ml-1">

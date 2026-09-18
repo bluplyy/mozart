@@ -3,7 +3,9 @@ export interface DispatchedEmail {
   to: string;
   recipientName: string;
   subject: string;
-  code: string;
+  code?: string;
+  token?: string;
+  confirmationUrl?: string;
   sentAt: string;
   htmlContent: string;
   isRead?: boolean;
