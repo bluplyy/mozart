@@ -23,6 +23,10 @@ export default function ProductModal({
   const [price, setPrice] = useState<string>("1500");
   const [images, setImages] = useState<string[]>([]);
   const [availableSizes, setAvailableSizes] = useState<string[]>(["XS", "S", "M", "L", "XL"]);
+  const [description, setDescription] = useState("");
+  const [sustainability, setSustainability] = useState("");
+  const [productCare, setProductCare] = useState("");
+  const [boutiqueAvailability, setBoutiqueAvailability] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,6 +35,10 @@ export default function ProductModal({
       setTitle(initialData.title);
       setCategory(initialData.category);
       setPrice(initialData.price.toString());
+      setDescription(initialData.description || "");
+      setSustainability(initialData.sustainability || "");
+      setProductCare(initialData.product_care || "");
+      setBoutiqueAvailability(initialData.boutique_availability || "");
       
       // Populate sizes
       if (initialData.available_sizes && initialData.available_sizes.length > 0) {
@@ -52,6 +60,10 @@ export default function ProductModal({
       setTitle("");
       setCategory("Men");
       setPrice("2200");
+      setDescription("Hadir kembali dalam siluet eksklusif khas Rumah Mode MOZART, dibuat dari bahan sensorial berkualitas tinggi yang terinspirasi dari arsip atelier klasik.");
+      setSustainability("100% serat alami diproduksi secara etis dan berkelanjutan di atelier bersejarah mitra kami di Eropa.");
+      setProductCare("Cuci kering profesional (dry clean only). Simpan pada gantungan kayu berukir dan gunakan pelindung busana katun.");
+      setBoutiqueAvailability("Tersedia di Salon Privat Paris (12 Place Vendôme) dan Butik Pilihan Milan.");
       setAvailableSizes(["XS", "S", "M", "L", "XL"]);
       setImages([
         "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop",
@@ -97,7 +109,10 @@ export default function ProductModal({
         secondary_image_url: secondaryImage,
         images: images,
         available_sizes: availableSizes,
-        description: initialData?.description || "",
+        description: description.trim(),
+        sustainability: sustainability.trim() || undefined,
+        product_care: productCare.trim() || undefined,
+        boutique_availability: boutiqueAvailability.trim() || undefined,
         details: initialData?.details || undefined,
       });
       onClose();
@@ -253,6 +268,72 @@ export default function ProductModal({
             <p className="text-[10px] text-neutral-500 mt-2">
               Ukuran yang ditandai <span className="font-semibold text-black">TERSEDIA</span> akan dapat dipilih dan dibeli oleh pelanggan di halaman produk.
             </p>
+          </div>
+
+          {/* Deskripsi Narasi Produk (Baca Lebih Lanjut) */}
+          <div className="pt-2 border-t border-black/[0.06]">
+            <label className="block text-[11px] uppercase tracking-[0.2em] text-neutral-800 font-semibold mb-2">
+              Deskripsi & Kisah Produk
+            </label>
+            <textarea
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Neverfull MM hadir kembali dalam Monogram Emblème khas Rumah Mode..."
+              className="w-full bg-white border border-neutral-300 px-4 py-3 text-[13px] text-neutral-900 focus:border-black outline-none leading-relaxed"
+            />
+            <p className="text-[10px] text-neutral-400 mt-1">
+              Teks ini akan ditampilkan di halaman produk dengan tautan interaktif &quot;Baca lebih lanjut&quot;.
+            </p>
+          </div>
+
+          {/* Section Accordion Items */}
+          <div className="space-y-4 pt-2 border-t border-black/[0.06]">
+            <span className="block text-[11px] uppercase tracking-[0.2em] text-neutral-800 font-semibold">
+              Informasi Accordion (Public Drawer)
+            </span>
+
+            {/* Sustainability */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-medium mb-1.5">
+                Sustainability
+              </label>
+              <textarea
+                rows={2}
+                value={sustainability}
+                onChange={(e) => setSustainability(e.target.value)}
+                placeholder="Komitmen ramah lingkungan, bahan daur ulang, atau sertifikasi keberlanjutan..."
+                className="w-full bg-white border border-neutral-300 px-4 py-2.5 text-[12px] text-neutral-900 focus:border-black outline-none leading-relaxed"
+              />
+            </div>
+
+            {/* Product Care */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-medium mb-1.5">
+                Product Care
+              </label>
+              <textarea
+                rows={2}
+                value={productCare}
+                onChange={(e) => setProductCare(e.target.value)}
+                placeholder="Petunjuk perawatan, pencucian khusus, atau penyimpanan..."
+                className="w-full bg-white border border-neutral-300 px-4 py-2.5 text-[12px] text-neutral-900 focus:border-black outline-none leading-relaxed"
+              />
+            </div>
+
+            {/* Lihat Ketersediaan di Butik */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-medium mb-1.5">
+                Lihat Ketersediaan di Butik
+              </label>
+              <textarea
+                rows={2}
+                value={boutiqueAvailability}
+                onChange={(e) => setBoutiqueAvailability(e.target.value)}
+                placeholder="Informasi ketersediaan stok fisik di salon/butik resmi..."
+                className="w-full bg-white border border-neutral-300 px-4 py-2.5 text-[12px] text-neutral-900 focus:border-black outline-none leading-relaxed"
+              />
+            </div>
           </div>
 
           {/* Actions */}

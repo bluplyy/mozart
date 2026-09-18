@@ -10,8 +10,8 @@ import {
   Check,
   ShieldCheck,
   Truck,
-  RotateCcw,
-  Sparkles,
+  Plus,
+  Minus,
 } from "lucide-react";
 
 export default function ProductDetailPage() {
@@ -23,7 +23,12 @@ export default function ProductDetailPage() {
 
   const [selectedSize, setSelectedSize] = useState("M");
   const [added, setAdded] = useState(false);
-  const [activeTab, setActiveTab] = useState<"delivery" | "care" | "provenance">("delivery");
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection((prev) => (prev === section ? null : section));
+  };
 
   const product = products.find((p) => p.id === id);
 
@@ -216,61 +221,133 @@ export default function ProductDetailPage() {
             </p>
           </div>
 
-          {/* Atelier Guarantees Accordion */}
-          <div className="border-t border-black/[0.08] pt-6 space-y-4">
-            <div className="flex border-b border-black/[0.08] text-[10px] uppercase tracking-[0.2em]">
-              <button
-                onClick={() => setActiveTab("delivery")}
-                className={`pb-2.5 mr-6 transition-colors ${
-                  activeTab === "delivery" ? "border-b-2 border-black font-semibold text-black" : "text-neutral-400"
-                }`}
+          {/* Digital Advisor Assistance Callout */}
+          <div className="pt-2 text-[13px] text-neutral-600 font-light leading-relaxed">
+            <p>
+              Hubungi Digital Advisor kami yang tersedia jika ada pertanyaan mengenai produk ini.{" "}
+              <a
+                href={`https://wa.me/6281234567890?text=${encodeURIComponent(
+                  `Halo Digital Advisor MOZART, saya memiliki pertanyaan mengenai piece ${product.title} (REF: ${product.id.slice(0, 10).toUpperCase()}).`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-neutral-900 underline underline-offset-4 hover:opacity-75 transition-opacity"
               >
-                Courier Delivery
-              </button>
+                Hubungi kami.
+              </a>
+            </p>
+          </div>
+
+          {/* Product Description with 'Baca lebih lanjut' Toggle */}
+          <div className="space-y-2 pt-1">
+            <p
+              className={`text-[13px] text-neutral-600 font-light leading-relaxed transition-all duration-300 ${
+                isDescExpanded ? "" : "line-clamp-3"
+              }`}
+            >
+              {product.description ||
+                "Neverfull MM hadir kembali dalam Monogram Emblème khas Rumah Mode, dibuat dari bahan sensorial jacquard yang terinspirasi dari canvas orisinal tahun 1896. Tas ini menyatukan keahlian pengerjaan atelier dengan siluet kontemporer yang abadi."}
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsDescExpanded(!isDescExpanded)}
+              className="text-[13px] text-neutral-900 font-medium underline underline-offset-4 hover:opacity-75 transition-opacity cursor-pointer block"
+            >
+              {isDescExpanded ? "Tampilkan lebih sedikit" : "Baca lebih lanjut"}
+            </button>
+          </div>
+
+          {/* Luxury Information Accordion (Sustainability, Product Care, Butik) */}
+          <div className="border-t border-neutral-200 mt-6 divide-y divide-neutral-200">
+            {/* Sustainability */}
+            <div>
               <button
-                onClick={() => setActiveTab("care")}
-                className={`pb-2.5 mr-6 transition-colors ${
-                  activeTab === "care" ? "border-b-2 border-black font-semibold text-black" : "text-neutral-400"
-                }`}
+                type="button"
+                onClick={() => toggleSection("sustainability")}
+                className="w-full py-4 flex items-center justify-between text-left group transition-colors"
               >
-                Atelier Care
+                <span className="text-[14px] text-neutral-900 font-normal tracking-wide group-hover:opacity-75">
+                  Sustainability
+                </span>
+                <span className="text-neutral-700 shrink-0 ml-4">
+                  {openSection === "sustainability" ? (
+                    <Minus size={16} strokeWidth={1.5} />
+                  ) : (
+                    <Plus size={16} strokeWidth={1.5} />
+                  )}
+                </span>
               </button>
-              <button
-                onClick={() => setActiveTab("provenance")}
-                className={`pb-2.5 transition-colors ${
-                  activeTab === "provenance" ? "border-b-2 border-black font-semibold text-black" : "text-neutral-400"
-                }`}
-              >
-                Authenticity
-              </button>
+              {openSection === "sustainability" && (
+                <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
+                  {product.sustainability ||
+                    "MOZART berkomitmen terhadap keberlanjutan dan pelestarian lingkungan hidup. Setiap helai bahan diproduksi secara bertanggung jawab dengan sertifikasi standar lingkungan internasional, meminimalisir jejak karbon, serta menggunakan kemasan 100% dapat didaur ulang yang berasal dari hutan terkelola lestari."}
+                </div>
+              )}
             </div>
 
-            <div className="text-[12px] text-neutral-600 font-light leading-relaxed min-h-[60px]">
-              {activeTab === "delivery" && (
-                <div className="flex items-start space-x-3">
-                  <Truck size={16} className="text-neutral-800 shrink-0 mt-0.5" />
-                  <span>
-                    Complimentary DHL Express courier within 2–4 business days. Signature required upon receipt in our custom black presentation box.
-                  </span>
-                </div>
-              )}
-              {activeTab === "care" && (
-                <div className="flex items-start space-x-3">
-                  <RotateCcw size={16} className="text-neutral-800 shrink-0 mt-0.5" />
-                  <span>
-                    Specialist dry clean only. Store on provided cedarwood contoured hanger with breathable garment protector.
-                  </span>
-                </div>
-              )}
-              {activeTab === "provenance" && (
-                <div className="flex items-start space-x-3">
-                  <ShieldCheck size={16} className="text-neutral-800 shrink-0 mt-0.5" />
-                  <span>
-                    Each creation includes an NFC-enabled authenticity medallion registered to the Mozart digital archive in Paris.
-                  </span>
+            {/* Product Care */}
+            <div>
+              <button
+                type="button"
+                onClick={() => toggleSection("product_care")}
+                className="w-full py-4 flex items-center justify-between text-left group transition-colors"
+              >
+                <span className="text-[14px] text-neutral-900 font-normal tracking-wide group-hover:opacity-75">
+                  Product Care
+                </span>
+                <span className="text-neutral-700 shrink-0 ml-4">
+                  {openSection === "product_care" ? (
+                    <Minus size={16} strokeWidth={1.5} />
+                  ) : (
+                    <Plus size={16} strokeWidth={1.5} />
+                  )}
+                </span>
+              </button>
+              {openSection === "product_care" && (
+                <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
+                  {product.product_care ||
+                    "Untuk menjaga keindahan dan daya tahan busana haute couture ini:\n• Simpan dalam dust bag katun berpori di ruangan dengan suhu sejuk dan stabil.\n• Hindari paparan langsung air, cairan kimiawi, parfum, dan sinar matahari berlebih.\n• Disarankan perawatan melalui dry cleaning profesional bersertifikasi haute couture."}
                 </div>
               )}
             </div>
+
+            {/* Lihat ketersediaan di butik */}
+            <div>
+              <button
+                type="button"
+                onClick={() => toggleSection("boutique_availability")}
+                className="w-full py-4 flex items-center justify-between text-left group transition-colors"
+              >
+                <span className="text-[14px] text-neutral-900 font-normal tracking-wide group-hover:opacity-75">
+                  Lihat ketersediaan di butik
+                </span>
+                <span className="text-neutral-700 shrink-0 ml-4">
+                  {openSection === "boutique_availability" ? (
+                    <Minus size={16} strokeWidth={1.5} />
+                  ) : (
+                    <Plus size={16} strokeWidth={1.5} />
+                  )}
+                </span>
+              </button>
+              {openSection === "boutique_availability" && (
+                <div className="pb-5 pt-1 text-[13px] text-neutral-600 font-light leading-relaxed animate-fadeIn whitespace-pre-line">
+                  {product.boutique_availability ||
+                    "Koleksi ini tersedia untuk reservasi privat di butik resmi MOZART:\n• Jakarta: Plaza Indonesia, Level 1 (Atelier Boutique)\n• Paris: 12 Place Vendôme (Private Salon)\n• Milan: Via Montenapoleone\nSilakan hubungi Digital Advisor kami untuk menjadwalkan janji temu atau memastikan ketersediaan ukuran."}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Delivery & Provenance Trust Signals */}
+          <div className="pt-4 flex items-center justify-between text-[10px] uppercase tracking-[0.15em] text-neutral-500 font-light">
+            <span className="flex items-center space-x-1.5">
+              <Truck size={13} className="text-neutral-700" />
+              <span>Complimentary DHL Express</span>
+            </span>
+            <span className="flex items-center space-x-1.5">
+              <ShieldCheck size={13} className="text-neutral-700" />
+              <span>NFC Certified Piece</span>
+            </span>
           </div>
         </div>
       </div>

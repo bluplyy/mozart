@@ -13,6 +13,9 @@ export interface Product {
   available_sizes?: string[];
   description: string;
   details?: string;
+  sustainability?: string;
+  product_care?: string;
+  boutique_availability?: string;
   created_at?: string;
 }
 
